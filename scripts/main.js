@@ -159,9 +159,9 @@ var pageModule = function() {
 	var initialize = function() {
 
 	var filterMenuCategories = [
-		{name: 'General Type', filterItems: dataResults[personal].filters.general},
-		{name: 'Technical Skills', filterItems: dataResults[personal].filters.skills.technical},
-		{name: 'Organizations', filterItems: dataResults[personal].filters.organizations}
+		{name: 'General Type', filterItems: dataResults['personal'].filters.general},
+		{name: 'Technical Skills', filterItems: dataResults['personal'].filters.skills.technical},
+		{name: 'Organizations', filterItems: dataResults['personal'].filters.organizations}
 	];
 
 	var eventBus = new Vue({});
@@ -169,7 +169,7 @@ var pageModule = function() {
 	var titleApp = new Vue({
 		el: '#title-container',
 		data: {
-			personTitle : dataResults[personal].title
+			personTitle : dataResults['personal'].title
 		},
 		methods: {
 			'toggleMenuPane' : function() {
@@ -189,7 +189,7 @@ var pageModule = function() {
 		el: '#help-container',
 		data : {
 			displayHelp : false,
-			fullHelpTexts : dataResults[help].sections,
+			fullHelpTexts : dataResults['help'].sections,
 			interactiveStep: 0
 		},
 		methods: {
@@ -505,14 +505,14 @@ var pageModule = function() {
 	var resumeApp = new Vue({
 		el: '#resume',
 		data: {
-			experiences: dataResults[personal].experiences,
-			education: dataResults[personal].education
+			experiences: dataResults['personal'].experiences,
+			education: dataResults['personal'].education
 		},
 		components: {
 			'resume-section' : {
 				data: function() {
 					return {
-						sectionContent: dataResults[personal].resume[this.type],
+						sectionContent: dataResults['personal'].resume[this.type],
 						setAllVisible: false,
 						setAllHidden: false
 					}

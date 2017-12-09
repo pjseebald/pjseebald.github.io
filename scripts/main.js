@@ -15,7 +15,10 @@ var pageModule = function() {
 		});
 	});
 	
+	console.log(dataResults);
+	
 	$.when.apply($, deferreds).then(function() {
+		console.log('Initialized.');
 		initialize();
 	});
 	

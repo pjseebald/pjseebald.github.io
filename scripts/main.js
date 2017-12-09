@@ -7,17 +7,18 @@ var pageModule = function() {
 		settings: 'settings.json',
 		personal: 'personal.json'
 	};
+	console.log(dataUrls);
 	var dataResults = {};
 	
 	var deferreds = $.map(dataUrls, function(value, key) {
+		console.log('Key, value: ' + key + ' | ' + value);
 		return $.getJSON(baseDataUrl + value, function(currentJsonData) {
 			dataResults[key] = currentJsonData;
 		});
 	});
 	
-	console.log(dataResults);
-	
 	$.when.apply($, deferreds).then(function() {
+		console.log(dataResults);
 		console.log('Initialized.');
 		initialize();
 	});

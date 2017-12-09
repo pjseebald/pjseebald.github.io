@@ -1,0 +1,85 @@
+{
+	"name": "Paul Seebald",
+	"title": "Paul Seebald, Ph.D.",
+	"filters": {
+		"general": [
+			{"name": "Data Analysis"},
+			{"name": "Mechanical Engineering"},
+			{"name": "Software Engineering"},
+			{"name": "Teaching"},
+			{"name": "Volunteer"}
+		],
+		"skills": {
+			"technical": [
+				{"name": "APIs"},
+				{"name": "Cloud"},
+				{"name": "CSS"},
+				{"name": "Data Modeling"},
+				{"name": "HTML"},
+				{"name": "Java"},
+				{"name": "Javascript"},
+				{"name": "jQuery"},
+				{"name": "Labview"},
+				{"name": "Matlab"},
+				{"name": "Microsoft Excel"},
+				{"name": "PowerShell"},
+				{"name": "Python"},
+				{"name": "SQL"},
+				{"name": "Time Series Analysis"},
+				{"name": "TM1"}
+			]
+		},
+		"organizations": [
+			{"name": "IBM"},
+			{"name": "Purdue University"},
+			{"name": "Grove City College"}
+		]
+	},
+	"resume": {
+		"experience": [{
+				"org": "IBM",
+				"position": "Software Engineer",
+				"descriptions": [
+					{"years": {"start": 2017, "end": 2017}, "description": "Tested scripts for DevOps to create and maintain virtual machines in the cloud.", "tags": "PowerShell,IBM,Cloud,Software Engineering"},
+					{"years": {"start": 2016, "end": 2017}, "description": "Added features and fixed defects for front-end TM1 modeling workspace in BDD agile project and continuous delivery cycle. Worked with HTML, CSS, and Javascript with jQuery for front-end development and Java for back-end service with a REST API.", "tags": "IBM,HTML,CSS,Java,Javascript,jQuery,TM1,APIs,Software Engineering"},
+					{"years": {"start": 2015, "end": 2017}, "description": "Developed and supported Java utility that consumed multiple API's (REST and Java) for IBM Cognos TM1 and IBM Decision Optimization software. Adapted for local & cloud architecture.", "tags": "Data Modeling,IBM,APIs,Java,Cloud,Software Engineering"},
+					{"years": {"start": 2015, "end": 2015}, "description": "Created data model for online cloud trial with thousands of users and assisted with maintenance.", "tags": "Data Modeling,IBM,TM1,Cloud,Software Engineering"},
+					{"years": {"start": 2014, "end": 2015}, "description": "Designed and built data models for financial planning and forecasting applications in IBM Cognos TM1.", "tags": "Data Modeling,IBM,TM1,Microsoft Excel,Software Engineering"}
+				]
+			},{
+				"org": "Purdue University",
+				"position": "Doctoral Researcher",
+				"descriptions": [
+					{"years": {"start": 2014, "end": 2014}, "description": "Led and evaluated students in fluid mechanics experimental laboratory sessions.", "tags": "Data Analysis,Purdue University,Mechanical Engineering,Teaching"},
+					{"years": {"start": 2013, "end": 2014}, "description": "Quantitatively determined measures of turbulence for the injection of supercritical fluids.", "tags": "Data Analysis,Purdue University,Mechanical Engineering,Time Series Analysis,Matlab"},
+					{"years": {"start": 2013, "end": 2014}, "description": "Wrote computational algorithm in MATLAB that identified fluid jet edge in thousands of high-resolution images, then calculated correlation-based length scales.", tags: "Data Analysis,Purdue University,Mechanical Engineering,Time Series Analysis,Matlab,Software Engineering"},
+					{"years": {"start": 2013, "end": 2014}, "description": "Analyzed irregularly spaced time series data with advanced algorithms written in MATLAB.", "tags": "Data Analysis,Purdue University,Mechanical Engineering,Time Series Analysis,Matlab"},
+					{"years": {"start": 2013, "end": 2014}, "description": "Taught multiple class sessions of numerical methods and fluid mechanics lab for graduate students on and off campus.", "tags": "Data Analysis,Purdue University,Mechanical Engineering,Teaching"},
+					{"years": {"start": 2012, "end": 2013}, "description": "Designed and programmed data acquisition program for laboratory in LabVIEW.", "tags": "Data Analysis,Purdue University,Mechanical Engineering,Time Series Analysis,Matlab"},
+				]
+			}
+		],
+		"education": [
+			{"org": "Purdue University", "gpa": "3.85", "degree": "Ph.D. in Mechanical Engineering", "gradYear": "2014", "tags": "Purdue University,Mechanical Engineering"},
+			{"org": "Grove City College", "gpa": "3.88", "degree": "B.S. in Mechanical Engineering", "gradYear": "2007", "tags": "Grove City College,Mechanical Engineering"}
+		],
+		"projects": [
+			{"description": "Built an interactive resume website using Javascript framework Vue.js.", "tags": "HTML,Javascript,jQuery,CSS,Software Engineering"},
+			{"description": "Designed, built, and maintained interactive web page for managing a college football team roster.", "tags": "HTML,Javascript,jQuery,CSS,Software Engineering"},
+			{"description": "Used linear and nonlinear regression analysis to calculate the monetary value of draft picks compared to free agents for an NFL team.", "tags": "Data Analysis,Python"},
+			{"description": "Compiled, HTML formatted, and emailed unread tweets through Python and the Twitter API. Used a database to store read tweet ID's.", "tags": "Python,APIs,HTML,Software Engineering,SQL"},
+			{"description": "Performed consulting for 247Sports to develop appropriate scoring equation utilizing multiple factors. Utilized Python web scraping to compile data.", "tags": "Python,Data Analysis"},
+			{"description": "Wrote Arduino (C++ derivative) program to control motor timing for food supply system.", "tags":"Software Engineering"}
+		],
+		"activities": [
+			{"description": "Independent learning through online classes for database/SQL, Powershell, Java, R programming, data science, and many others.", "tags": "Software Engineering,Java,SQL,PowerShell"},
+			{"description": "Volunteering as a weekly reading tutor for local elementary school.", "tags": "Volunteer"},
+			{"description": "Presented scientific concepts to middle school students for IBM E-Week as a volunteer.", "tags": "IBM,Volunteer"},
+			{"description": "Presented research poster to junior high students at Next Generation Scholars poster event.", "tags": "Purdue University,Volunteer"},
+			{"description": "Volunteered for MATHCOUNTS event.", "tags":"Volunteer,Purdue University"},
+			{"description": "Served as Mentor for incoming Purdue graduate students.", "tags":"Purdue University,Volunteer"},
+			{"description": "Founded Grove City College ME Honor Society.", "tags":"Grove City College,Mechanical Engineering"}
+			
+		]
+	}
+}

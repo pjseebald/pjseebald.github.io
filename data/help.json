@@ -1,0 +1,28 @@
+{
+	"sections": [
+			{
+				"title": "What do the icons mean?",
+				"body": "<div class=\"help-icon-row\"><div id=\"help-filter-menu\" class=\"help icon\"></div><span class=\"help-icon-txt\">Toggles the menu containing resum&#233; filters.</span></div><div class=\"help-icon-row\"><div id=\"help-goto\" class=\"help icon\"></div><span class=\"help-icon-txt\">Opens my LinkedIn profile.</span></div><div class=\"help-icon-row\"><div id=\"help-help\" class=\"help icon\"></div><span class=\"help-icon-txt\">Displays help window.</span></div><div class=\"help-icon-row\"><div id=\"help-resume-section-menu\" class=\"help icon\"></div><span class=\"help-icon-txt\">More options for selecting stories within a section.</span></div><div id=\"help-icon-settings\" class=\"help icon\"></div><span class=\"help-icon-txt\">Display settings for filter menu and resum&#233;.</span></div><div class=\"help-icon-row\"><div id=\"help-icon-clear\" class=\"help icon\"></div><span class=\"help-icon-txt\">Clear search text.</span></div>"
+			},
+			{
+				"title": "What is this webpage?",
+				"body": "An interactive resum&#233, where you get to choose what you see. Why look at a resum&#233 where you have to search through blocks of black and white text to find the pieces relevant to you? Just select the items in the filter menu that interest you. Then print it out!"
+			},
+			{
+				"title": "How to use this webpage?",
+				"body": "Select any relevant filters from the menu on the left and use the section menus to show/hide and expand/collapse the cards as needed. You can also search for filters in the menu. Then either view the descriptions or print a formatted resum&#233 based only on the stories selected using the filters."
+			},
+			{
+				"title": "Why did you make this webpage?",
+				"body": "For many reasons. Personally, because it was fun and it helped me learn a new Javascript framework (Vue.js). But also because I feel there are issues with traditional resum&#233s. First, they all look so similar because of formatting standards. Second, we are told to tailor our resum&#233 to each job as well as keep it to one page, potentially removing things I'd want to show. But despite the time people invest in tailoring a resum&#233 to each job, that resum&#233 might get thrown out before anyone even looks at it, or a hiring manager will only look at it for 7 seconds. This webpage doesn't solve every problem, but I believe it shows a creative way for hiring managers to look at my profile through the lens of what skills they want to see. This is a resum&#233 that is easy to tailor for whoever is viewing it. Since I have many different experiences that span many different subjects, I feel it's useful for people to view my resum&#233 through the lens of what subjects interest them."
+			},
+			{
+				"title": "How can I contact you?",
+				"body": "Send me a LinkedIn message! Use the icon next to the help to access my LinkedIn page. Please let me know what you think of the site, good or bad, and please tell me if you happen to find any defects or have any suggestions."
+			},
+			{
+				"title": "Tell me more about your background.",
+				"body": "Since resum&#233 stories can be dry and lacking context, I always enjoy discussing my background. I started out as a mechanical engineer in undergraduate college. Continued to graduate school because I wanted to have a stronger education and because I wanted more experience working hands-on in a laboratory. As it turned out the experience was very helpful, but I didn't really enjoy working in the laboratory. But I did enjoy programming during a computational fluid dynamics course. After realizing how well my problem solving skills could translate to programming despite lacking a software engineering background, I loaded up on online classes and personal projects in an attempt to transition to either data science or software engineering. As such, I have entered the field of software engineering with a desire to always continue my learning, and this project has been a part of that by putting it into practice."
+			}
+		]
+}

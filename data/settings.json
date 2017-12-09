@@ -1,0 +1,17 @@
+{
+	"filterMatch" : {
+		"type": "radio",
+		"heading": "Stories must match:",
+		"inputs": [{
+				"id": "any",
+				"value": "any",
+				"labelText": "ANY selected filters"
+			},
+			{
+				"id": "all",
+				"value": "all",
+				"labelText": "ALL selected filters"
+			}
+		]
+	}
+}

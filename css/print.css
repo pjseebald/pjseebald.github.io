@@ -1,0 +1,337 @@
+@page {
+	size: auto;
+}
+
+html, body {
+	height: 95%;
+}
+
+body {
+	font-family: "Arial", sans-serif;
+}
+
+.ui-loader {
+	display: none;
+}
+
+.icon, .menu {
+	display: none;
+}
+
+.tooltip {
+	display: none;
+}
+
+.tooltip .tooltiptext {
+	display: none;
+}
+
+#help-container {
+	display: none;
+}
+
+#page-container {
+	display: block;
+	width: 100%;
+}
+
+#title-container {
+	display: block;
+	height: auto;
+	text-align: center;
+}
+
+#title-name {
+	font-family: 'Lora', serif;
+	font-size: 24px;
+	margin: 10px;
+	position: absolute;
+	left: 0;	top: 0;
+	text-align: left;
+}
+
+#title-filter-menu, #title-help, #title-goto {
+	display: none;
+	height: 0;
+}
+
+#title-link-this, #title-link-print-linkedin {
+	float: right;
+	height: 100%;
+}
+
+#title-link-print-linkedin {
+	clear: right;
+}
+
+#help-container {
+	display: none;
+}
+
+#filter-menu {
+	display: none;
+	width: 0px;
+}
+
+#resume {
+	background-color: white;
+	clear: both;
+	display: block;
+	height: auto;
+	margin-top: 10px;
+	width: 100%;
+}
+
+.resume-section-container {
+	width: 100%;
+}
+
+.exp-org-card {
+	margin: 0px 0px 10px 10px;
+}
+
+.exp-org-card-title {
+	display: block;
+	font-family: 'Roboto', sans-serif;
+	font-size: 90%;
+	font-weight: bold;
+	padding: 0px 0px 2px 0px;
+}
+
+.card {
+	background-color: white;
+	display: inline-block;
+	height: auto;
+	
+	margin: 0px 0px 0px 10px;
+	padding: 3px 0px 2px 0px;
+	width: 90%;
+}
+
+.section-body.education .card-row {
+	display: inline-block;
+	font-weight: normal;
+	width: auto;
+}
+
+.card-flex-container {
+	display: inline-block;
+	height: 100%;
+	overflow: auto;
+	width: 95%;
+}
+
+.card-row {
+	display: inline-flex;
+	width: 100%;
+}
+
+.education.card span {
+	font-family: Georgia;
+	height: 30%;
+	margin: 0px 0px 0px 0px;
+	vertical-align: middle;
+}
+
+.edu-org:after {
+	content: ", ";
+}
+
+.edu-yr:after {
+	content: ":";
+	margin-right: 5px;
+}
+
+.edu-gpa:before {
+	content: " (";
+}
+
+.edu-gpa:after {
+	content: ")";
+}
+
+.experience.card .exp-desc, .projects.card, .experience.card, .activities.card {
+	height: auto;
+	vertical-align: middle;
+	white-space: normal;
+}
+
+.projects.card .card-row:before, .experience.card .card-row:before, .activities.card .card-row:before {
+	display: inline-block;
+	height: 100%;
+	margin-right: 6px;
+	vertical-align: middle;
+}
+
+.experience.card .card-row:before {
+	content: "\2022";
+}
+
+.projects.card .card-row:before {
+	content: "\25A0";
+	font-size: small;
+}
+
+.activities.card .card-row:before {
+	content: "\25CB";
+	font-size: small;
+}
+
+.projects.card {
+	font-family: Georgia;
+	font-size: smaller;
+}
+
+.activities.card {
+	font-family: "Roboto";
+	font-size: smaller;
+}
+
+.section-title {
+	border-top: 1px solid black;
+	border-bottom: 0.5px solid black;
+	font-family: Georgia;
+	font-size: 110%;
+	font-variant: small-caps;
+	margin: 0px 0px 4px 0px;
+	padding: 2px 0px 2px 0px;
+	width: 100%;
+}
+
+.section-title, .section-body {
+	margin-top: 5px;
+}
+
+.resume-section-menu {
+	display: inline-block;
+	margin-left: 10px;
+	width: 16px;
+}
+
+.resume-section-menu:before {
+	content: url('../webfonts/menu.svg');
+}
+
+.resume-section-menu {
+	position: relative;
+}
+
+.exp-desc {
+	font-size: smaller;
+	display: inline-block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#filter-selections {
+	background-color: white;
+	border: 1px solid black;
+	clear: both;
+	display: block;
+	margin-top: 20px;
+	min-height: 29.6px;
+	width: 100%;
+}
+
+#fs-title {
+	margin: 5px;
+}
+
+#fs-clear-filters {
+	display: none;
+}
+
+#fs-clear-filters:after {
+	content: "";
+	display: none;
+}
+
+.selected-filter {
+	border: 1px solid gray;
+	border-radius: 4px;
+	/*clear: left;*/
+	display: inline-block;
+	margin: 2px 5px 2px 5px;
+	padding: 0px 4px 0px 5px;
+}
+
+.sf-name {
+	height: 100%;
+	padding: 2px 4px 2px 0px;
+}
+
+.flt-r {
+	float: right;
+}
+
+.flt-l {
+	float: left;
+}
+
+.bdr-c-blk {
+	border-color: black;
+}
+
+.bdr-c-slt {
+	border-color: slate;
+}
+
+.bdr-r-s {
+	border-radius: 4px;
+}
+
+.disp-b {
+	display: block;
+}
+
+.disp-ib {
+	display: inline-block;
+}
+
+.disp-f {
+	display: flex;
+}
+
+.disp-if {
+	display: inline-flex;
+}
+
+.disp-n {
+	display: none;
+}
+
+.csr-p {
+	cursor: pointer;
+	cursor: hand;
+}
+
+.clr-gray {
+	color: #c0c0c0;
+}
+
+.f-w-b {
+	font-weight: bold;
+}
+
+.ht-f { /* full height */
+	height: 100%;
+}
+
+.spacer {
+	width: 100%;
+}
+
+.txt-o-e {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.va-m {
+	vertical-align: middle;
+}
+
+.va-b {
+	vertical-align: bottom;
+}

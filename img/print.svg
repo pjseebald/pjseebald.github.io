@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg x="0px" y="0px" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" xml:space="preserve">
+
+<g>
+	<circle cx="10" cy="40" r="3" fill="black"/>
+	<path fill="none" stroke="black" stroke-width="4" d="M20,5 h40 v20 h-40 v-20 z"/>
+	<path fill="none" stroke="black" stroke-width="5" stroke-linejoin="round" d="M0,25 h80 v30 h-22 M22,55 h-22 v-30 h40 M22,55 z"/>
+	<path fill="none" stroke="black" stroke-width="4" d="M25,45 h30 L65,75 h-50 L25,45 z"/>
+	<path fille="none" stroke="black" stroke-width="2" d="M24,68 h32 M26,62 h28 M28,56 h24 z"/>
+</g>
+</svg>

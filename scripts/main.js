@@ -230,6 +230,7 @@ var pageModule = function() {
 				},
 				'clearFilter' : function(filterName, menu) {
 					if (menu || menu === undefined) {
+						// If the request came from the menu, then remove the filter from the selectedList
 						this.selectedList = this.selectedList.filter( function(e) {return e !== filterName} );
 					}
 					if (!menu && menu === undefined) {
@@ -239,6 +240,7 @@ var pageModule = function() {
 				},
 				'addFilter' : function(filterName) {
 					if (this.selectedList.indexOf(filterName) === -1) {
+						// If the filter isn't in the list already, add it.
 						this.selectedList.push(filterName);
 					}
 				}
@@ -249,7 +251,6 @@ var pageModule = function() {
 					template: '<div class="selected-filter"><div class="sf-name">{{ filter }}</div><span class="sf-close-icon icon" v-on:click="removeSelFilter()"></span></div>',
 					methods: {
 						'removeSelFilter' : function () {
-							//var f = this.filter;
 							this.$emit('rem-filter', this.filter);
 						}
 					}
@@ -257,7 +258,10 @@ var pageModule = function() {
 			}
 		});
 
-		// Register the resume section menu
+		/**
+		 * Vue component defining the menu for each resume section.
+		 * The menu contains the functionality for showing and hiding all stories in that section.
+		 */
 		Vue.component('resume-section-menu', {
 			data: function() {
 				return {
@@ -272,7 +276,7 @@ var pageModule = function() {
 				'toggleList' : function() {
 					this.visible = !this.visible;
 					if (this.visible) {
-						$(this.$el).find('ul').css('background-color','inherit');
+						//$(this.$el).find('ul').css('background-color','inherit');
 					}
 				},
 				'toggleAllVisibility' : function(visible, event) {

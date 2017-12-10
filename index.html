@@ -20,14 +20,14 @@
 	<div id="menu-block" v-show="!showSettings">
 		<div id="side-menu-title" class="filters">FILTERS</div>
 		<div id="filter-search">
-			<input id="filter-input" class="va-m" v-model="filterText" placeholder="Find a filter">
+			<input id="filter-input" class="va-m" v-model="filterSearchText" placeholder="Find a filter">
 			<span id="fi-icon" class="icon tooltip" tooltip="Clear Search" tooltip-left v-on:click="clearSearchContents"></span>
 		</div>
 		<filter-menu-category 
 			v-for="(fc, index) in filterCategories" 
 			v-bind:category="fc" 
 			:key="index"
-			:ftext="filterText">
+			:ftext="filterSearchText">
 		</filter-menu-category>
 	</div>
 	<div id="menu-block" v-show="showSettings">

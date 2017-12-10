@@ -275,9 +275,6 @@ var pageModule = function() {
 			methods: {
 				'toggleList' : function() {
 					this.visible = !this.visible;
-					if (this.visible) {
-						//$(this.$el).find('ul').css('background-color','inherit');
-					}
 				},
 				'toggleAllVisibility' : function(visible, event) {
 					event.stopPropagation();
@@ -292,7 +289,10 @@ var pageModule = function() {
 			</ul></div>'
 		});
 
-		// Register the resume card: the fundamental unit for displaying a resume story in any section
+		/**
+		 * Vue component defining the resume card: the fundamental unit for displaying a resume story in any section
+		 * Has a general form and functionality with inner HTML specific to the type of resume section.
+		 */
 		Vue.component('resume-card', {
 			created: function() {
 				var crd = this;
@@ -326,6 +326,10 @@ var pageModule = function() {
 				}
 			},
 			methods: {
+				/**
+				 * Method for checking if resume story is still visible after any event.
+				 * Used when adding, removing filters or changing settings
+				 */
 				'checkVisibility' : function(f, added) {
 					var initVisibility = this.visible;
 					if (added) {	// Adding a filter to list
@@ -342,6 +346,7 @@ var pageModule = function() {
 						}
 
 						var mfLen = this.matchedFilters.length;
+						// Set visibility depending on settings and current filters
 						if (filterMenuApp.match === 'any') {
 							this.visible = (filtLen === 0) || !(mfLen === 0);
 						} else if (filterMenuApp.match === 'all') {
@@ -349,11 +354,11 @@ var pageModule = function() {
 						}
 					}
 
-					// Check if visibility changed. If so, emit the 'changeNumChildren' event.
 					this.changeNumChildren(initVisibility);
 				},
 				'changeNumChildren' : function(initVisibility) {
-					if (initVisibility ? !this.visible : this.visible) {		// XOR ternary operation -- if visibility changes
+					// Check if visibility changed. If so, emit the 'changeNumChildren' event.
+					if (initVisibility ? !this.visible : this.visible) {		// XOR ternary operation -- if visibility changes from initial
 						this.$emit('changeNumChildren', this.visible);
 					}
 				}
@@ -380,12 +385,16 @@ var pageModule = function() {
 			template: '<div class="card" :class="[type]" v-show="isVisible"><component :is="type" :content="content"></component></div>'
 		});
 
+		/**
+		 * App for resume section.
+		 * 
+		 */
 		var resumeApp = new Vue({
 			el: '#resume',
-			data: {
+			/*data: {
 				experiences: dataResults['personal'].experiences,
 				education: dataResults['personal'].education
-			},
+			},*/
 			components: {
 				'resume-section' : {
 					data: function() {

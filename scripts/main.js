@@ -9,12 +9,14 @@ var pageModule = function() {
 	};
 	var dataResults = {};
 
+	// Get deferred object for each data json file
 	var deferreds = $.map(dataUrls, function(value, key) {
 		return $.getJSON(baseDataUrl + value, function(currentJsonData) {
 			dataResults[key] = currentJsonData;
 		});
 	});
 
+	// After data is loaded, then build the page
 	$.when.apply($, deferreds).then(function() {
 		buildPage();
 	});
@@ -95,14 +97,10 @@ var pageModule = function() {
 				match: 'any'
 			},
 			computed: {
-				settings: function(value) {
-					console.log('testing');
+				settings: function() {
 					return {
 						'match': this.match
 					};
-				},
-				settingsIconTooltip: function() {
-					return this.showSettings ? 'Filters' : 'Settings'
 				}
 			},
 			watch: {
@@ -167,7 +165,7 @@ var pageModule = function() {
 								});
 							},
 							props: ['item','ftextitem'],
-							template: '<div class="filter-menu-item csr-p" v-show="checkMatch(item.name)" v-on:click="toggleSelection($event)" :class="{ selected : isSelected }">			{{ item.name }}</div>',
+							template: '<div class="filter-menu-item csr-p" v-show="checkMatch(item.name)" v-on:click="toggleSelection($event)" :class="{ selected : isSelected }">{{ item.name }}</div>',
 							data: function() {
 								return {
 									showing: true,
@@ -203,16 +201,15 @@ var pageModule = function() {
 			}
 		});
 
+		/**
+		 * App for the filter selection bar (bottom of the page, shows selected filters). 
+		 * Creates the bar and the processes for adding/removing filters.
+		 */
 		var filterSelectionBarApp = new Vue({
 			el: '#filter-selections',
 			data: {
 				selectedList: [],
 				openMenu: true
-			},
-			computed : {
-				currentHt: function() {
-					return $(this.$el).outerHeight(true);
-				}
 			},
 			created: function() {
 				var bar = this;
@@ -244,9 +241,6 @@ var pageModule = function() {
 					if (this.selectedList.indexOf(filterName) === -1) {
 						this.selectedList.push(filterName);
 					}
-				},
-				'getCurrentHt' : function() {
-					return $(this.$el).outerHeight(true);
 				}
 			},
 			components: {
@@ -255,7 +249,7 @@ var pageModule = function() {
 					template: '<div class="selected-filter"><div class="sf-name">{{ filter }}</div><span class="sf-close-icon icon" v-on:click="removeSelFilter()"></span></div>',
 					methods: {
 						'removeSelFilter' : function () {
-							var f = this.filter;
+							//var f = this.filter;
 							this.$emit('rem-filter', this.filter);
 						}
 					}

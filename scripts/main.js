@@ -391,10 +391,6 @@ var pageModule = function() {
 		 */
 		var resumeApp = new Vue({
 			el: '#resume',
-			/*data: {
-				experiences: dataResults['personal'].experiences,
-				education: dataResults['personal'].education
-			},*/
 			components: {
 				'resume-section' : {
 					data: function() {
@@ -420,6 +416,7 @@ var pageModule = function() {
 								}
 							},
 							computed: {
+								// Hide the organization card if all children are hidden
 								checkEmpty: function() {
 									return (this.numChildren === 0 || this.allHidden);
 								}

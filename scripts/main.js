@@ -1,6 +1,6 @@
 var pageModule = function() {
 	
-	// Loading data
+	// Start by loading the data from json files. Use the data to populate the components in the webpage.
 	var baseDataUrl = '../data/';
 	var dataUrls = {
 		help: 'help.json',
@@ -8,18 +8,22 @@ var pageModule = function() {
 		personal: 'personal.json'
 	};
 	var dataResults = {};
-	
+
 	var deferreds = $.map(dataUrls, function(value, key) {
 		return $.getJSON(baseDataUrl + value, function(currentJsonData) {
 			dataResults[key] = currentJsonData;
 		});
 	});
-	
+
 	$.when.apply($, deferreds).then(function() {
-		initialize();
+		buildPage();
 	});
 	
-	var initialize = function() {
+	/**
+	 * Builds the webpage by creating different components.
+	 * @return 		Nothing.
+	 */
+	var buildPage = function() {
 
 		var filterMenuCategories = [
 			{name: 'General Type', filterItems: dataResults['personal'].filters.general},
@@ -27,8 +31,15 @@ var pageModule = function() {
 			{name: 'Organizations', filterItems: dataResults['personal'].filters.organizations}
 		];
 
+		/**
+		 * Vue app to store events between apps.
+		 */
 		var eventBus = new Vue({});
 
+		/**
+		 * App for title section container. Hub for general actions of opening the filter menu, 
+		 * showing help section, and printing the resume.
+		 */
 		var titleApp = new Vue({
 			el: '#title-container',
 			data: {
@@ -47,7 +58,9 @@ var pageModule = function() {
 			}
 		})
 
-		// For the help app
+		/**
+		 * App for the help section
+		 */
 		var helpApp = new Vue({
 			el: '#help-container',
 			data : {
@@ -68,18 +81,22 @@ var pageModule = function() {
 			}
 		});
 
-		// For the filter menu
+		/**
+		 * App for the filter menu. 
+		 * Creates the sections of the menu and handles adding, removing, and searching for filters.
+		 */
 		var filterMenuApp = new Vue({
 			el: '#filter-menu',
 			data: {
 				filterCategories: filterMenuCategories,
-				filterText: '',
+				filterSearchText: '',
 				fMenuShow: true,
 				showSettings: false,
 				match: 'any'
 			},
 			computed: {
 				settings: function(value) {
+					console.log('testing');
 					return {
 						'match': this.match
 					};
@@ -95,7 +112,7 @@ var pageModule = function() {
 			},
 			methods: {
 				'clearSearchContents': function() {
-					this.filterText = '';
+					this.filterSearchText = '';
 				},
 				'toggleMenuPane' : function() {
 					this.fMenuShow = !this.fMenuShow;

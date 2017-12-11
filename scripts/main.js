@@ -92,7 +92,7 @@ var pageModule = function() {
 			data: {
 				filterCategories: filterMenuCategories,
 				filterSearchText: '',
-				fMenuShow: true,
+				fMenuShow: false,
 				showSettings: false,
 				match: 'any'
 			},
@@ -114,7 +114,7 @@ var pageModule = function() {
 				},
 				'toggleMenuPane' : function() {
 					this.fMenuShow = !this.fMenuShow;
-					eventBus.$emit('toggle-menu');
+					//eventBus.$emit('toggle-menu');	// Don't need this anymore
 				},
 				'toggleSettingsPane' : function() {
 					this.showSettings = !this.showSettings;
@@ -208,8 +208,7 @@ var pageModule = function() {
 		var filterSelectionBarApp = new Vue({
 			el: '#filter-selections',
 			data: {
-				selectedList: [],
-				openMenu: true
+				selectedList: []
 			},
 			created: function() {
 				var bar = this;
@@ -218,9 +217,6 @@ var pageModule = function() {
 				});
 				eventBus.$on('removed-filter', function(input) {
 					bar.clearFilter(input.name, input.menu);
-				});
-				eventBus.$on('toggle-menu', function() {
-					bar.openMenu = !bar.openMenu;
 				});
 			},
 			methods: {

@@ -556,6 +556,7 @@ body {
 
 #filter-menu {
 	background-color: #2a8da8;
+	border-top: 2px solid black;
 	border-left: 2px solid black;
 	box-sizing: border-box;
 	color: white;

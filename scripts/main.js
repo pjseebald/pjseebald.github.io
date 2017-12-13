@@ -68,11 +68,30 @@ var pageModule = function() {
 			data : {
 				displayHelp : false,
 				fullHelpTexts : dataResults['help'].sections,
-				interactiveStep: 0
+				interactiveStep: 0,
+				type: 'none'
 			},
 			methods: {
 				'toggleHelp' : function() {
+					if (this.displayHelp) {
+						// If exiting help, next time help is activated, want the default choice to be presented again.
+						this.type = 'none';
+						this.resetInteractiveStep();
+					}
 					this.displayHelp = !this.displayHelp;
+				},
+				'goToFaq' : function() {
+					this.type = 'faq';
+				},
+				'startInteractiveHelp' : function() {
+					this.type = 'interactive';
+					this.incrementInteractiveStep();
+				},
+				'incrementInteractiveStep' : function() {
+					++this.interactiveStep;
+				},
+				'resetInteractiveStep' : function() {
+					this.interactiveStep = 0;
 				}
 			},
 			components: {

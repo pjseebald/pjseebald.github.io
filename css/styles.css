@@ -30,6 +30,10 @@
 		width: 100%;
 	}
 	
+	.help-link {
+		width: 70%;
+	}
+	
 	.section-title {
 		margin: 10px 2px 24px 15px;
 	}
@@ -84,6 +88,10 @@
 		margin: auto;
 		margin-top: 3%;
 		width: 50%;
+	}
+	
+	.help-link {
+		width: 30%;
 	}
 	
 	.section-title, .section-body {
@@ -242,7 +250,7 @@ body {
 	align-content: stretch;
 	
 	/* Flexbox child */
-	flex: 1 0 auto;
+	flex: 0 0 auto;
 }
 
 #title-name {
@@ -321,7 +329,7 @@ body {
 
 #help-block {
 	background-color: white;
-	border: 1px solid black;
+	border: 4px solid black;
 	box-sizing: border-box;
 	font-size: 1em;
 	overflow-y: auto;
@@ -343,6 +351,24 @@ body {
 
 #help-close-icon:before {
 	content: url('../img/close_black.svg');
+}
+
+#init-help {
+	clear: both;
+	margin-right: 2em;
+	margin-top: 5em;
+}
+
+.help-link {
+	border: 2px solid teal;
+	border-radius: 4px;
+	box-shadow: 5px 5px teal;
+	cursor: pointer;
+	height: 5em;
+	line-height: 5em;
+	margin: auto;
+	margin-top: 25px;
+	text-align: center;
 }
 
 #main-help {
@@ -382,6 +408,16 @@ body {
 
 #main-container {
 	display: flex;
+	width: 100%;
+	
+	/* Flexbox child css */
+	flex: 1 1 auto;
+	
+	/* Flex parent css */
+	flex-direction: row;
+	justify-content: space-between;
+	align-content: stretch;
+	align-items: stretch;
 }
 
 #resume {
@@ -573,7 +609,7 @@ body {
 	overflow-x: hidden;
 	
 	/* Flex child */
-	flex-grow: 1;
+	flex-grow: 0;
 	flex-shrink: 0;
 }
 
@@ -584,6 +620,7 @@ body {
 #side-menu-title {
 	background-image: url("../img/line_decoration.svg");
 	background-position: left top;
+	background-repeat: no-repeat;
 	background-size: 100% 95%;
 	font-family: "Roboto", sans-serif;
 	font-weight: bold;

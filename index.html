@@ -26,7 +26,7 @@
 </div>
 <div id="help-container" :class="{'visible' : displayHelp}" v-if="displayHelp">
 	<div id="help-overlay" v-on:click="toggleHelp()"></div>
-	<div id="help-block">
+	<div id="help-block" v-show="this.type === 'none' || this.type === 'faq'">
 		<span id="help-close-icon" class="icon" v-on:click="toggleHelp()"></span>
 		<div id="main-help">
 			<help-section v-for="(ht, index) in fullHelpTexts" 
@@ -53,6 +53,7 @@
 			<input id="filter-input" class="va-m" v-model="filterSearchText" placeholder="Find a filter">
 			<span id="filter-icon-clear" class="icon tooltip" tooltip="Clear Search" tooltip-left v-on:click="clearSearchContents"></span>
 		</div>
+		<button id="clear-all-filters" class="button" v-on:click="clearAllFilters()">Clear All</button>
 		<filter-menu-category 
 			v-for="(fc, index) in filterCategories" 
 			v-bind:category="fc" 
@@ -75,13 +76,6 @@
 		</div>
 	</div>
 </div>
-</div>
-
-<div id="filter-selections">
-	<div id="fs-title" class="disp-ib">Selected Filters: </div>
-	<div id="fs-clear-filters" class="disp-ib" v-on:click="clearAllFilters()" 
-		:class="{ 'clr-gray' : selectedList.length === 0, 'csr-p' : selectedList.length > 0 }">Clear All Filters</div>
-	<selection-name v-for="(f, index) in selectedList" v-bind:key="index" :filter="f" @rem-filter="clearFilter"></selection-name>
 </div>
 
 </div>

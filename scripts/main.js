@@ -22,6 +22,23 @@ var pageModule = function() {
 	});
 	
 	/**
+	 * Stores for managing variables referenced by multiple apps.
+	 * filters: manages which filters are selected in the menu to apply to resume stories.
+	 */	
+	var filters = {
+		selected: [],
+		addSelected: function(name) {
+			this.selected.push(name);
+		},
+		clearSelected: function() {
+			this.selected.length = 0;
+		},
+		removeSelected: function(name) {
+			this.selected.splice(this.selected.indexOf(name), 1);
+		}
+	}
+	
+	/**
 	 * Builds the webpage by creating different components.
 	 * @return 		Nothing.
 	 */
@@ -45,7 +62,7 @@ var pageModule = function() {
 		var titleApp = new Vue({
 			el: '#title-container',
 			data: {
-				personTitle : dataResults['personal'].title
+				personTitle: dataResults['personal'].title
 			},
 			methods: {
 				'toggleMenuPane' : function() {
@@ -67,31 +84,11 @@ var pageModule = function() {
 			el: '#help-container',
 			data : {
 				displayHelp : false,
-				fullHelpTexts : dataResults['help'].sections,
-				interactiveStep: 0,
-				type: 'none'
+				fullHelpTexts : dataResults['help'].sections
 			},
 			methods: {
 				'toggleHelp' : function() {
-					if (this.displayHelp) {
-						// If exiting help, next time help is activated, want the default choice to be presented again.
-						this.type = 'none';
-						this.resetInteractiveStep();
-					}
 					this.displayHelp = !this.displayHelp;
-				},
-				'goToFaq' : function() {
-					this.type = 'faq';
-				},
-				'startInteractiveHelp' : function() {
-					this.type = 'interactive';
-					this.incrementInteractiveStep();
-				},
-				'incrementInteractiveStep' : function() {
-					++this.interactiveStep;
-				},
-				'resetInteractiveStep' : function() {
-					this.interactiveStep = 0;
 				}
 			},
 			components: {
@@ -133,10 +130,13 @@ var pageModule = function() {
 				},
 				'toggleMenuPane' : function() {
 					this.fMenuShow = !this.fMenuShow;
-					//eventBus.$emit('toggle-menu');	// Don't need this anymore
 				},
 				'toggleSettingsPane' : function() {
 					this.showSettings = !this.showSettings;
+				},
+				'clearAllFilters': function() {
+					filters.clearSelected();
+					eventBus.$emit('remove-all-filters');
 				}
 			},
 			components: {
@@ -177,11 +177,11 @@ var pageModule = function() {
 										fmitem.toggleSelection();
 									}
 								});
-								eventBus.$on('removed-filter', function(input) {
+								/*eventBus.$on('removed-filter', function(input) {
 									if (!input.menu && (fmitem.item.name === input.name)) {
 										fmitem.toggleSelection();
 									}
-								});
+								});*/
 							},
 							props: ['item','ftextitem'],
 							template: '<div class="filter-menu-item csr-p" v-show="checkMatch(item.name)" v-on:click="toggleSelection($event)" :class="{ selected : isSelected }">{{ item.name }}</div>',
@@ -206,67 +206,16 @@ var pageModule = function() {
 									this.$data.isSelected = !this.$data.isSelected;
 									var n = this.item.name;
 									if (this.$data.isSelected) {	// Selecting
+										filters.addSelected(n);
 										eventBus.$emit('added-filter', n);
 									} else {	// Deselecting
+										filters.removeSelected(n);
 										if (event) {
-											eventBus.$emit('removed-filter', {name: n, menu: true});
+											eventBus.$emit('removed-filter', n);
 										}
 									}
 								}
 							}
-						}
-					}
-				}
-			}
-		});
-
-		/**
-		 * App for the filter selection bar (bottom of the page, shows selected filters). 
-		 * Creates the bar and the processes for adding/removing filters.
-		 */
-		var filterSelectionBarApp = new Vue({
-			el: '#filter-selections',
-			data: {
-				selectedList: []
-			},
-			created: function() {
-				var bar = this;
-				eventBus.$on('added-filter', function (name) {
-					bar.addFilter(name);
-				});
-				eventBus.$on('removed-filter', function(input) {
-					bar.clearFilter(input.name, input.menu);
-				});
-			},
-			methods: {
-				'clearAllFilters' : function() {
-					this.selectedList = [];
-					eventBus.$emit('remove-all-filters');
-				},
-				'clearFilter' : function(filterName, menu) {
-					if (menu || menu === undefined) {
-						// If the request came from the menu, then remove the filter from the selectedList
-						this.selectedList = this.selectedList.filter( function(e) {return e !== filterName} );
-					}
-					if (!menu && menu === undefined) {
-						// If removal request came from the filter selections bar component, need to send removal to filter menu as well
-						eventBus.$emit('removed-filter', {name: filterName, menu: false});
-					}
-				},
-				'addFilter' : function(filterName) {
-					if (this.selectedList.indexOf(filterName) === -1) {
-						// If the filter isn't in the list already, add it.
-						this.selectedList.push(filterName);
-					}
-				}
-			},
-			components: {
-				'selection-name' : {
-					props: ['filter'],
-					template: '<div class="selected-filter"><div class="sf-name">{{ filter }}</div><span class="sf-close-icon icon" v-on:click="removeSelFilter()"></span></div>',
-					methods: {
-						'removeSelFilter' : function () {
-							this.$emit('rem-filter', this.filter);
 						}
 					}
 				}
@@ -321,7 +270,7 @@ var pageModule = function() {
 					crd.checkVisibility();
 				});
 				eventBus.$on('remove-all-filters', function() {
-					crd.matchedFilters = [];
+					crd.matchedFilters.length = 0;
 					var initVisibility = crd.visible;
 					crd.visible = true;
 					crd.changeNumChildren(initVisibility);	// If visibility changed, then change number of children of parent
@@ -345,18 +294,18 @@ var pageModule = function() {
 				 * Method for checking if resume story is still visible after any event.
 				 * Used when adding, removing filters or changing settings
 				 */
-				'checkVisibility' : function(f, added) {
+				'checkVisibility' : function(filterName, added) {
 					var initVisibility = this.visible;
 					if (added) {	// Adding a filter to list
-						if (this.tags.indexOf(f) > -1) {this.matchedFilters.push(f);}
+						if (this.tags.indexOf(filterName) > -1) {this.matchedFilters.push(filterName);}
 
 						this.visible = filterMenuApp.match === 'any' ? (this.matchedFilters.length > 0) : 
-							filterMenuApp.match === 'all' ? (this.matchedFilters.length === filterSelectionBarApp.selectedList.length) : true;
+							filterMenuApp.match === 'all' ? (this.matchedFilters.length === filters.selected.length) : true;
 
-					} else {	// Removing a filter from the list
-						var filtLen = filterSelectionBarApp.selectedList.length;
-						if (f) {
-							var i = this.matchedFilters.indexOf(f.name);
+					} else {	// Removing a filter from the list OR changing settings
+						var filtLen = filters.selected.length;
+						if (filterName) {	// Removing a filter from the list
+							var i = this.matchedFilters.indexOf(filterName);
 							if (i > -1) {this.matchedFilters.splice(i, 1);}
 						}
 
@@ -402,7 +351,7 @@ var pageModule = function() {
 
 		/**
 		 * App for resume section.
-		 * 
+		 * Contains cards for each resume story
 		 */
 		var resumeApp = new Vue({
 			el: '#resume',
@@ -451,8 +400,7 @@ var pageModule = function() {
 				}
 			}
 		});
-	
-	};
+	}
 
 return {};
 

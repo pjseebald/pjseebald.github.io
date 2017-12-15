@@ -26,7 +26,7 @@
 </div>
 <div id="help-container" :class="{'visible' : displayHelp}" v-if="displayHelp">
 	<div id="help-overlay" v-on:click="toggleHelp()"></div>
-	<div id="help-block" v-show="this.type === 'none' || this.type === 'faq'">
+	<div id="help-block">
 		<span id="help-close-icon" class="icon" v-on:click="toggleHelp()"></span>
 		<div id="main-help">
 			<help-section v-for="(ht, index) in fullHelpTexts" 

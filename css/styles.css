@@ -8,7 +8,6 @@
 	/* Small width screens */
 	
 	#title-container {
-		background-image: url("../img/title_background_mobile.svg");
 		font-size: 1em;
 	}
 	
@@ -75,6 +74,9 @@
 	
 	#title-container {
 		background-image: url("../img/title_background.svg");
+		background-size: 50% 150%;
+		background-position: center center;
+		background-repeat: no-repeat;
 		font-size: 2em;
 	}
 	
@@ -240,10 +242,7 @@ body {
 }
 
 #title-container {
-	background-size: 50% 150%;
 	background-color: #D9ECEC;
-	background-position: center center;
-	background-repeat: no-repeat;
 	box-sizing: border-box;
 	font-size: 2em;
 	margin: 0em;

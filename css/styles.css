@@ -85,12 +85,10 @@
 	}
 	
 	#help-block {
-		/* height: 75%; */
-		height: auto;
+		height: 75%;
 		margin: auto;
 		margin-top: 3%;
-		/*width: 50%;*/
-		width: auto;
+		width: 50%;
 	}
 	
 	.help-link {

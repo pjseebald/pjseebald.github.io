@@ -311,13 +311,6 @@ body {
 	z-index: 1;
 }
 
-#title-filter-menu.demo {
-	border: 2px solid red;
-	border-radius: 100%;
-	padding: 10px;
-	z-index: 1006;
-}
-
 #help-container {
 	height: 100%;
 	left: 0;
@@ -341,39 +334,6 @@ body {
 	top: 0;
 	width: 100%;
 	z-index: 1001;
-}
-
-#demo-bubble {
-	background: teal;
-	border: 2px solid black;
-	border-radius: 5px;
-	padding: 10px;
-	position: absolute;
-	text-align: center;
-	z-index: 1006;
-	
-	/* Temp positioning */
-	margin: 40%;
-	margin-top: 5%;
-}
-
-#demo-bubble.step1 #demo-bubble-text:before {
-	content: 'Open the filter menu';
-}
-
-#demo-bubble-text {
-	color: white;
-}
-
-#demo-exit-button {
-	display: block;
-	color: white;
-	box-shadow: 2px 2px white;
-	border: 1px solid white;
-	border-radius: 2px;
-	margin: 2em 1em 1em 1em;
-	cursor: pointer;
-	padding: 2px 5px 2px 5px;
 }
 
 #help-block {

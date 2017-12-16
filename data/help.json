@@ -14,7 +14,7 @@
 			},
 			{
 				"title": "Why did you make this webpage?",
-				"body": "Many reasons:<ul><li>It's fun</li><li>It helped me learn my first Javascript framework (Vue.js).</li><li>My background is unique enough that I don't feel a traditional resum&#233; accurately represents me.</li><li>Traditional resum&#233;s seem to be lacking in general. If you don't care about my Python projects, then they shouldn't have to take up space.</li><li>Could also help me easily tailor my resume for each job application if needed.</li>"
+				"body": "Many reasons:<ul><li>It's fun</li><li>It helped me learn my first Javascript framework (Vue.js).</li><li>My background is unique enough that I don't feel a traditional resum&#233; accurately represents my abilities.</li><li>Traditional resum&#233;s seem to be lacking in general. If you don't care about my Python projects (e.g.), then they shouldn't have to take up space.</li><li>This site could also help me easily tailor my resume for each job application if needed.</li>"
 			},
 			{
 				"title": "How can I contact you?",
@@ -22,7 +22,7 @@
 			},
 			{
 				"title": "Tell me more about your background.",
-				"body": "Please send me a LinkedIn message, because I always like to discuss this (truly shocking that someone enjoys talking about themselves). I consider my background fairly unique with a career transition from mechanical engineering to software engineering, and there are a lot of aspects that I like to discuss."
+				"body": "Please send me a LinkedIn message, because I always like to discuss my background and transition from mechanical to software engineering (yes, shocking that someone enjoys talking about themselves)."
 			}
 		]
 }

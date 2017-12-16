@@ -9,8 +9,8 @@
 		<stop offset="100%" stop-color="coral" stop-opacity="0.3"/>
 	</linearGradient>
 </defs>
-<g transform="translate(400,60)">	
+<g transform="translate(400,60)" -o-transform="translate(400,60)">	
 	<path id="outside-curve" filter="url(#f1)" opacity="0.3" fill="none" stroke="url(#grad1)" stroke-width="4" d="M-400,-40 C -380 100,-375 60,-340 -20 S -330 -26,-324 33 S-312 32,-304 -12 S-284 -18,-270 4 S-240 30,-200 -0 S100 -80, 200 -100"></path>
-	<use href="#outside-curve" transform="scale(-1,-1)"/>
+	<use href="#outside-curve" transform="scale(-1,-1)" -o-transform="scale(-1,-1)"/>
 </g>
 </svg>

@@ -29,8 +29,8 @@
 		width: 100%;
 	}
 	
-	.help-link {
-		width: 70%;
+	#main-container {
+		border-top: 2px solid coral;
 	}
 	
 	.section-title {
@@ -93,8 +93,8 @@
 		width: 50%;
 	}
 	
-	.help-link {
-		width: 30%;
+	#main-container {
+		border-top: 2px solid black;
 	}
 	
 	.section-title, .section-body {
@@ -430,7 +430,6 @@ body {
 
 #resume {
 	background: linear-gradient(to bottom right, #efeea7 50%, #D9ECEC);
-	border-top: 2px solid black;
 	overflow-y: auto;
 	
 	/* Flexbox child css */
@@ -609,7 +608,6 @@ body {
 
 #filter-menu {
 	background-color: #2a8da8;
-	border-top: 2px solid black;
 	border-left: 2px solid black;
 	box-sizing: border-box;
 	color: white;

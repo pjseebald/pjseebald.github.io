@@ -330,7 +330,7 @@ var pageModule = function() {
 			components: {
 				'education': {
 					props: ['content'],
-					template: '<div class="card-flex-container"><div class="card-row"><span class="edu-org f-w-b">{{ content.org }}</span><span class="edu-yr">{{ content.gradYear }}</span></div><div class="card-row"><span class="edu-deg">{{ content.degree }}</span><span class="edu-gpa">{{ content.gpa }} GPA</span></div></div>'
+					template: '<div class="card-flex-container"><div class="card-row"><span class="edu-org f-w-b">{{ content.org }}</span><span class="edu-yr">{{ content.gradYear }}</span></div><div class="card-row"><span class="edu-deg">{{ content.degree }}</span></div></div>'
 				},
 				'experience': {
 					props: ['content'],

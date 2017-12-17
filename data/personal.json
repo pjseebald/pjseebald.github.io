@@ -60,8 +60,8 @@
 			}
 		],
 		"education": [
-			{"org": "Purdue University", "gpa": "3.85", "degree": "Ph.D. in Mechanical Engineering", "gradYear": "2014", "tags": "Purdue University,Mechanical Engineering"},
-			{"org": "Grove City College", "gpa": "3.88", "degree": "B.S. in Mechanical Engineering", "gradYear": "2007", "tags": "Grove City College,Mechanical Engineering"}
+			{"org": "Purdue University", "degree": "Ph.D. in Mechanical Engineering", "gradYear": "2014", "tags": "Purdue University,Mechanical Engineering"},
+			{"org": "Grove City College", "degree": "B.S. in Mechanical Engineering", "gradYear": "2007", "tags": "Grove City College,Mechanical Engineering"}
 		],
 		"projects": [
 			{"description": "Built an interactive resume website using Javascript framework Vue.js.", "tags": "HTML,Javascript,jQuery,CSS,Software Engineering"},

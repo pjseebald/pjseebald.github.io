@@ -1,32 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Lora');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 @page {
 	size: auto;
-}
-
-html, body {
-	height: 95%;
 }
 
 body {
 	font-family: "Arial", sans-serif;
 }
 
-.ui-loader {
-	display: none;
-}
-
-.icon, .menu {
-	display: none;
-}
-
-.tooltip {
-	display: none;
-}
-
-.tooltip .tooltiptext {
-	display: none;
-}
-
-#help-container {
+.icon, .menu, .button, .tooltip, .tooltip .tooltiptext, input, #fs-clear-filters, #fs-clear-filters:after, #title-filter-menu, #title-help, #title-goto, #welcome-container {
 	display: none;
 }
 
@@ -39,46 +22,74 @@ body {
 	display: block;
 	height: auto;
 	text-align: center;
+	position: relative;
 }
 
 #title-name {
 	font-family: 'Lora', serif;
 	font-size: 24px;
 	margin: 10px;
-	position: absolute;
-	left: 0;	top: 0;
+	float: left;
 	text-align: left;
 }
 
 #title-filter-menu, #title-help, #title-goto {
-	display: none;
 	height: 0;
 }
 
 #title-link-this, #title-link-print-linkedin {
-	float: right;
+	/*float: right;*/
 	height: 100%;
+	text-align: right;
 }
 
 #title-link-print-linkedin {
 	clear: right;
 }
 
-#help-container {
+/* Filter Menu */
+#filter-menu {
+	display: block !important;
+	font-family: 'Lora', 'sans-serif';
+	margin-top: 1em;
+}
+
+.category-name-container, .filter-menu-item:not(.selected), #filter-search {
 	display: none;
 }
 
-#filter-menu {
-	display: none;
-	width: 0px;
+#side-menu-title {
+	display: inline-block;
+	font-weight: bold;
+	text-transform: capitalize;
 }
+
+#side-menu-title:before {
+	content: "Selected ";
+}
+
+#side-menu-title:after {
+	content: ": ";
+}
+
+.filter-category, .filter-menu-item.selected {
+	display: inline-block;
+}
+
+.filter-menu-item.selected {
+	margin-left: 0.4em;
+}
+
+.filter-menu-item.selected:after {
+	content: " | "
+}
+/* End Filter Menu */
 
 #resume {
 	background-color: white;
 	clear: both;
-	display: block;
+	display: block !important;
 	height: auto;
-	margin-top: 10px;
 	width: 100%;
 }
 
@@ -142,14 +153,6 @@ body {
 	margin-right: 5px;
 }
 
-.edu-gpa:before {
-	content: " (";
-}
-
-.edu-gpa:after {
-	content: ")";
-}
-
 .experience.card .exp-desc, .projects.card, .experience.card, .activities.card {
 	height: auto;
 	vertical-align: middle;
@@ -178,12 +181,12 @@ body {
 }
 
 .projects.card {
-	font-family: Georgia;
+	font-family: Georgia, sans-serif;
 	font-size: smaller;
 }
 
 .activities.card {
-	font-family: "Roboto";
+	font-family: 'Roboto', sans-serif;
 	font-size: smaller;
 }
 
@@ -202,20 +205,6 @@ body {
 	margin-top: 5px;
 }
 
-.resume-section-menu {
-	display: inline-block;
-	margin-left: 10px;
-	width: 16px;
-}
-
-.resume-section-menu:before {
-	content: url('../webfonts/menu.svg');
-}
-
-.resume-section-menu {
-	position: relative;
-}
-
 .exp-desc {
 	font-size: smaller;
 	display: inline-block;
@@ -224,81 +213,8 @@ body {
 	white-space: nowrap;
 }
 
-#filter-selections {
-	background-color: white;
-	border: 1px solid black;
-	clear: both;
-	display: block;
-	margin-top: 20px;
-	min-height: 29.6px;
-	width: 100%;
-}
-
-#fs-title {
-	margin: 5px;
-}
-
-#fs-clear-filters {
-	display: none;
-}
-
-#fs-clear-filters:after {
-	content: "";
-	display: none;
-}
-
-.selected-filter {
-	border: 1px solid gray;
-	border-radius: 4px;
-	/*clear: left;*/
-	display: inline-block;
-	margin: 2px 5px 2px 5px;
-	padding: 0px 4px 0px 5px;
-}
-
-.sf-name {
-	height: 100%;
-	padding: 2px 4px 2px 0px;
-}
-
-.flt-r {
-	float: right;
-}
-
-.flt-l {
-	float: left;
-}
-
-.bdr-c-blk {
-	border-color: black;
-}
-
-.bdr-c-slt {
-	border-color: slate;
-}
-
-.bdr-r-s {
-	border-radius: 4px;
-}
-
-.disp-b {
-	display: block;
-}
-
 .disp-ib {
 	display: inline-block;
-}
-
-.disp-f {
-	display: flex;
-}
-
-.disp-if {
-	display: inline-flex;
-}
-
-.disp-n {
-	display: none;
 }
 
 .csr-p {
@@ -312,26 +228,4 @@ body {
 
 .f-w-b {
 	font-weight: bold;
-}
-
-.ht-f { /* full height */
-	height: 100%;
-}
-
-.spacer {
-	width: 100%;
-}
-
-.txt-o-e {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-.va-m {
-	vertical-align: middle;
-}
-
-.va-b {
-	vertical-align: bottom;
 }

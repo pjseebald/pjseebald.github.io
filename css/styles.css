@@ -38,6 +38,10 @@
 		margin: 0 1em 0 1em;
 	}
 	
+	.welcome-steps, .help-text-body ul {
+		padding-left: 0em;
+	}
+	
 	#main-container {
 		border-top: 2px solid coral;
 	}

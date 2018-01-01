@@ -57,15 +57,15 @@ var pageModule = function() {
 			}
 		}
 	};
-	
-	// Apply default settings
-	settingsStore.resetDefaults(true);
-	
+
 	/**
 	 * Builds the webpage by creating different components.
 	 * @return 		Nothing.
 	 */
 	var buildPage = function() {
+
+		// Apply default settings
+		settingsStore.resetDefaults(true);
 
 		var filterMenuCategories = [
 			{name: 'General', filterItems: dataResults['personal'].filters.general},

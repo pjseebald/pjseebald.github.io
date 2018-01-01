@@ -14,66 +14,83 @@
 <div id="page-container">
 <div id="title-container">
 	<div id="title-name" class="f-w-b">{{ personTitle }}</div>
-
 	<div id="title-icon-container">
 		<div id="title-link-this">https://pseebald.github.io</div>
 		<div id="title-link-print-linkedin">https://www.linkedin.com/in/paulseebald</div>
-		<div id="title-filter-menu" class="icon disp-ib" tooltip="Filter Menu" tooltip-persistent tooltip-bottom v-on:click="toggleMenuPane()"></div>
-		<div id="title-print" class="icon disp-ib" tooltip="Print" tooltip-persistent tooltip-bottom v-on:click="printResume()"></div>
-		<div id="title-goto" class="icon disp-ib" tooltip="LinkedIn" tooltip-persistent tooltip-bottom><a rel="noopener noreferrer" target="_blank" href="https://www.linkedin.com/in/paulseebald"><span class="link-spanner"></span></a></div>
-		<div id="title-help" class="icon disp-ib" tooltip="Help" tooltip-persistent tooltip-bottom v-on:click="showHelp()"></div>
+		<div id="title-filter-menu" class="icon disp-ib" tooltip="Filter Menu" tooltip-bottom v-on:click="toggleMenuPane(this)"></div>
+		<div id="title-print" class="icon disp-ib" tooltip="Print" tooltip-bottom v-on:click="printResume()"></div>
+		<div id="title-goto" class="icon disp-ib" tooltip="LinkedIn" tooltip-bottom><a rel="noopener noreferrer" target="_blank" href="https://www.linkedin.com/in/paulseebald"><span class="link-spanner"></span></a></div>
+		<div id="title-help" class="icon disp-ib" :class="{'activated': showWelcome}" tooltip="Help" tooltip-bottom v-on:click="showHelp()"></div>
+		<div id="title-resume" class="icon disp-ib" :class="{'activated': !showWelcome}" tooltip="Resume" tooltip-bottom v-on:click="showResume()"></div>
 	</div>
 </div>
-<div id="help-container" :class="{'visible' : displayHelp}" v-if="displayHelp">
-	<div id="help-overlay" v-on:click="toggleHelp()"></div>
-	<div id="help-block">
-		<span id="help-close-icon" class="icon" v-on:click="toggleHelp()"></span>
-		<div id="main-help">
+
+<div id="main-container">
+<div id="main-page">
+	<transition-group name="fade-together">
+	<div id="welcome-container" v-show="showWelcome" key="welcome">
+		<div id="welcome-title">
+			<span id="welcome-title-welcome">Welcome to my </span><span id="welcome-title-resume">Interactive Resum&#233;</span>
+		</div>
+		<span id="personal-intro">I am a software engineer with a mechanical engineering background and a passion for finding solutions through code.</span>
+		<button id="open-resume" class="button" v-on:click="toggleHelp()">
+			See My Resum&#233;
+		</button>
+		<div class="welcome-intro">
+			<span>This <span class="f-w-b">Interactive Resum&#233; </span>is a way for you to see the parts of my resum&#233; that you want to see. How?</span>
+			<ul class="welcome-steps">
+				<li><span class="welcome-step-desc" v-on:click="toggleFilterMenu()">Open filter menu. <div id="help-filter-menu" class="help icon"></div></span> (Icons at the top of the screen)</li>
+				<li><span class="welcome-step-desc" v-on:click="addFilter('Software Engineering')">Select skills or categories.</span> Select what interests you from the menu (e.g. Software Engineering).</li>
+				<li><span class="f-w-b">Note: </span><span class="welcome-step-desc note">Click help <div id="help-help" class="help icon"></div></span> when viewing resum&#233; to return to this window.</li>
+				<li><span class="welcome-step-desc" v-on:click="toggleHelp()">View the resum&#233; <div id="help-resume" class="help icon"></div></span>that shows stories matching your filter selection(s).</li>
+				<li><span class="welcome-step-desc" v-on:click="printResume()">Print it out <div id="help-print" class="help icon"></div></span> to PDF or paper!</li>
+			</ul>
+		</div>
+		<button id="open-help" class="button arrow" :class="[{'open up': showHelp},{'down': !showHelp}]" v-on:click="showHelp = !showHelp">
+			{{ showHelp ? 'Close Help' : 'Open Help'}}
+		</button>
+		<transition name="fade">
+		<div id="main-help" v-show="showHelp">
 			<help-section v-for="(ht, index) in fullHelpTexts" 
 				v-bind:sectiontext="ht" 
 				:key="index">
 			</help-section>
 		</div>
+		</transition>
 	</div>
+	<div id="resume" v-show="!showWelcome" key="resume">
+		<resume-section :type="'education'"></resume-section>
+		<resume-section :type="'experience'"></resume-section>
+		<resume-section :type="'projects'"></resume-section>
+		<resume-section :type="'activities'"></resume-section>
+	</div>
+	</transition-group>
 </div>
-
-<div id="main-container">
-<div id="resume">
-	<resume-section :type="'education'"></resume-section>
-	<resume-section :type="'experience'"></resume-section>
-	<resume-section :type="'projects'"></resume-section>
-	<resume-section :type="'activities'"></resume-section>
-</div>
-<div id="filter-menu" class="menu" v-show="fMenuShow">
+<div id="filter-menu" class="menu" v-show="fMenuShow" @changeSetting="changeGlobalSetting">
 	<span class="settings-icon icon" :class="{'show-settings' : showSettings}" :tooltip="showSettings ? 'Filters' : 'Settings'" tooltip-right v-on:click="toggleSettingsPane()"></span>
 	<span class="close icon" tooltip="Close" tooltip-left v-on:click="toggleMenuPane()"></span>
-	<div id="menu-block" v-show="!showSettings">
-		<div id="side-menu-title" class="filters">FILTERS</div>
-		<div id="filter-search">
-			<input id="filter-input" class="va-m" v-model="filterSearchText" placeholder="Find a filter">
-			<span id="filter-icon-clear" class="icon tooltip" tooltip="Clear Search" tooltip-left v-on:click="clearSearchContents"></span>
+	<div id="menu-block">
+		<transition-group name="fade-together">
+		<div id="filter-menu-container" v-show="!showSettings" key="filters">
+			<div id="side-menu-title" class="filters">Filters</div>
+			<div id="filter-search">
+				<input id="filter-input" class="va-m" v-model="filterSearchText" placeholder="Find a filter">
+				<span id="filter-icon-clear" class="icon tooltip" tooltip="Clear Search" tooltip-left v-on:click="clearSearchContents"></span>
+			</div>
+			<button id="clear-all-filters" class="button" v-on:click="clearAllFilters()">Clear All</button>
+			<filter-menu-category 
+				v-for="(fc, index) in filterCategories" 
+				v-bind:category="fc" 
+				:key="index"
+				:ftext="filterSearchText">
+			</filter-menu-category>
 		</div>
-		<button id="clear-all-filters" class="button" v-on:click="clearAllFilters()">Clear All</button>
-		<filter-menu-category 
-			v-for="(fc, index) in filterCategories" 
-			v-bind:category="fc" 
-			:key="index"
-			:ftext="filterSearchText">
-		</filter-menu-category>
-	</div>
-	<div id="menu-block" v-show="showSettings">
-		<div id="side-menu-title" class="settings">SETTINGS</div>
-		<div class="setting-wrapper">
-			<label class="settings heading">Stories must match:</label>
-			<ul>
-			<li class="radio-wrapper"><input type="radio" name="filterMatch" id="any" value="any" v-model="match"/>
-				<label class="settings" for="any">ANY selected filters</label><div class="check"></div>
-			</li>
-			<li class="radio-wrapper"><input type="radio" name="filterMatch" id="all" value="all" v-model="match"/>
-				<label class="settings" for="all">ALL selected filters</label><div class="check"></div>
-			</li>
-			</ul>
+		<div id="settings-menu-container" v-show="showSettings" key="settings">
+			<div id="side-menu-title" class="settings">Settings</div>
+			<button id="reset-default-settings" class="button" v-on:click="resetDefaultSettings()">Reset Defaults</button>
+			<setting-item v-for="(settingItem, index) in settings" :item="settingItem" :key="index"></setting-item>
 		</div>
+		</transition>
 	</div>
 </div>
 </div>

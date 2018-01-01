@@ -24,11 +24,13 @@ var pageModule = function() {
 	/**
 	 * Stores for managing variables referenced by multiple apps.
 	 * filters: manages which filters are selected in the menu to apply to resume stories.
-	 */	
-	var filters = {
+	 */
+	var filtersStore = {
 		selected: [],
 		addSelected: function(name) {
-			this.selected.push(name);
+			if (this.selected.indexOf(name) < 0) {
+				this.selected.push(name);
+			}
 		},
 		clearSelected: function() {
 			this.selected.length = 0;
@@ -36,7 +38,28 @@ var pageModule = function() {
 		removeSelected: function(name) {
 			this.selected.splice(this.selected.indexOf(name), 1);
 		}
-	}
+	};
+	
+	var settingsStore = {
+		settings: {},
+		defaults: {},
+		changeSetting: function(key, value) {
+			this.settings[key] = value;
+		},
+		resetDefaults: function(init) {
+			var initSettings = dataResults.settings;
+			for (var i = 0; i < initSettings.length; i++) {
+				var key = initSettings[i].name;
+				if (init) {		// Initializing defaults from the file
+					this.defaults[key] = initSettings[i].defaultValue;
+				}
+				this.settings[key] = this.defaults[key];
+			}
+		}
+	};
+	
+	// Apply default settings
+	settingsStore.resetDefaults(true);
 	
 	/**
 	 * Builds the webpage by creating different components.
@@ -45,8 +68,9 @@ var pageModule = function() {
 	var buildPage = function() {
 
 		var filterMenuCategories = [
-			{name: 'General Type', filterItems: dataResults['personal'].filters.general},
+			{name: 'General', filterItems: dataResults['personal'].filters.general},
 			{name: 'Technical Skills', filterItems: dataResults['personal'].filters.skills.technical},
+			{name: 'Sections', filterItems: dataResults['personal'].filters.sections},
 			{name: 'Organizations', filterItems: dataResults['personal'].filters.organizations}
 		];
 
@@ -61,15 +85,32 @@ var pageModule = function() {
 		 */
 		var titleApp = new Vue({
 			el: '#title-container',
+			created: function () {
+				var title = this;
+				eventBus.$on('toggle-help', function() {
+					title.showWelcome = !title.showWelcome;
+				});
+				eventBus.$on('print-resume', function() {
+					title.printResume();
+				});
+			},
 			data: {
-				personTitle: dataResults['personal'].title
+				personTitle: dataResults['personal'].title,
+				showWelcome: true
 			},
 			methods: {
 				'toggleMenuPane' : function() {
-					filterMenuApp.toggleMenuPane();
+					eventBus.$emit('toggle-filter-menu');
 				},
 				'showHelp' : function() {
-					helpApp.toggleHelp();
+					if (!this.showWelcome) {
+						eventBus.$emit('toggle-help');
+					}
+				},
+				'showResume' : function() {
+					if (this.showWelcome) {
+						eventBus.$emit('toggle-help');
+					}
 				},
 				'printResume' : function() {
 					window.print();
@@ -78,68 +119,98 @@ var pageModule = function() {
 		})
 
 		/**
-		 * App for the help section
-		 */
-		var helpApp = new Vue({
-			el: '#help-container',
-			data : {
-				displayHelp : false,
-				fullHelpTexts : dataResults['help'].sections
-			},
-			methods: {
-				'toggleHelp' : function() {
-					this.displayHelp = !this.displayHelp;
-				}
-			},
-			components: {
-				'help-section': {
-					props: ['sectiontext'],
-					template: '<div class="help-section-container"><span class="help-text-title">{{ sectiontext.title }}</span><span class="help-text-body"><div v-html="sectiontext.body"></div></span></div>'
-				}
-			}
-		});
-
-		/**
 		 * App for the filter menu. 
 		 * Creates the sections of the menu and handles adding, removing, and searching for filters.
 		 */
-		var filterMenuApp = new Vue({
+		var menuApp = new Vue({
 			el: '#filter-menu',
+			created: function() {
+				var menu = this;
+				eventBus.$on('toggle-filter-menu', function(openMenu) {
+					menu.toggleMenuPane(openMenu);
+				});
+				eventBus.$on('change-setting', function(keyval) {
+					menu.changeGlobalSetting(keyval);
+				});
+			},
 			data: {
 				filterCategories: filterMenuCategories,
+				settings: dataResults.settings,
 				filterSearchText: '',
 				fMenuShow: false,
-				showSettings: false,
-				match: 'any'
-			},
-			computed: {
-				settings: function() {
-					return {
-						'match': this.match
-					};
-				}
-			},
-			watch: {
-				match: function() {
-					eventBus.$emit('change-settings', this.settings);
-				}
+				showSettings: false
 			},
 			methods: {
 				'clearSearchContents': function() {
 					this.filterSearchText = '';
 				},
-				'toggleMenuPane' : function() {
-					this.fMenuShow = !this.fMenuShow;
+				'toggleMenuPane' : function(openMenu) {
+					this.fMenuShow = openMenu ? true : !this.fMenuShow;
+					this.showSettings = false;
 				},
 				'toggleSettingsPane' : function() {
 					this.showSettings = !this.showSettings;
 				},
 				'clearAllFilters': function() {
-					filters.clearSelected();
+					filtersStore.clearSelected();
 					eventBus.$emit('remove-all-filters');
+				},
+				'changeGlobalSetting': function(setting) {
+					settingsStore.changeSetting(setting.key, setting.value);
+					eventBus.$emit('change-settings');
+				},
+				'resetDefaultSettings': function() {
+					settingsStore.resetDefaults();
+					eventBus.$emit('reset-default-settings');
 				}
 			},
 			components: {
+				'setting-item': {
+					props: ['item'],
+					template: '<div class="setting-wrapper"><label class="settings heading">{{ item.heading }}</label><component :is="item.type + \'-setting\'" :inputs="item.inputs" :settingName="item.name"></component></div>',
+					components: {
+						'radio-setting': {
+							created: function() {
+								var rsetting = this;
+								eventBus.$on('reset-default-settings', function() {
+									rsetting.updateSettingValue();
+								});
+							},
+							data: function() {
+								return {
+									curSettingValue: settingsStore.defaults[this.settingName]
+								}
+							},
+							methods: {
+								updateSettingValue: function(newValue) {
+									this.curSettingValue = newValue ? newValue : settingsStore.defaults[this.settingName];
+								}
+							},
+							props: ['inputs','settingName'],
+							template: '<ul><li class="radio-wrapper" v-for="(settingOption, index) in inputs" :key="index">\
+								<radio-setting-input :settingName="settingName" :settingId="settingOption.id" :settingValue="settingOption.value" :curValue="curSettingValue" @changeValue="updateSettingValue"></radio-setting-input>\
+								<label class="settings" :for="settingOption.id">{{ settingOption.labelText }}</label><div class="check"></div></li></ul>',
+							components: {
+								'radio-setting-input': {
+									computed: {
+										radioValue: {
+											get: function() {
+												return this.curValue;
+											},
+											set: function(newValue) {
+												console.log('Point 1: set radioValue');
+												this.$emit('changeValue', newValue);
+												eventBus.$emit('change-setting', {key: this.settingName, value: newValue});
+											}
+										}
+									},
+									props: ['settingName','settingId','settingValue','curValue'],
+									template: '<input type="radio" :name="settingName" :id="settingId" :value="settingValue" v-model="radioValue" :thisCurValue="curValue" />'
+								}
+							}
+						}
+					}
+				},
 				'filter-menu-category': {
 					props: ['category','ftext'],
 					template: '<div class="filter-category" :class="{\'expanded\' : this.expanded}" v-show="!checkEmpty"><div class="category-name-container" v-on:click="toggleExpand()"><span class="filter-category-icon icon"></span><span class="filter-category-name">{{ category.name }}</span></div>\
@@ -160,7 +231,8 @@ var pageModule = function() {
 					data: function() {
 						return {
 							numChildren: this.category.filterItems.length,
-							expanded: true
+							expanded: true,
+							breakToggleLoop: false
 						}
 					},
 					computed: {
@@ -172,19 +244,19 @@ var pageModule = function() {
 						'filter-menu-item': {
 							created: function() {
 								var fmitem = this;
+								eventBus.$on('added-filter-demo', function(name) {
+									if (name === fmitem.item.name) {
+										fmitem.toggleSelection();
+									}
+								});
 								eventBus.$on('remove-all-filters', function() {
 									if (fmitem.isSelected) {
 										fmitem.toggleSelection();
 									}
 								});
-								/*eventBus.$on('removed-filter', function(input) {
-									if (!input.menu && (fmitem.item.name === input.name)) {
-										fmitem.toggleSelection();
-									}
-								});*/
 							},
 							props: ['item','ftextitem'],
-							template: '<div class="filter-menu-item csr-p" v-show="checkMatch(item.name)" v-on:click="toggleSelection($event)" :class="{ selected : isSelected }">{{ item.name }}</div>',
+							template: '<div class="filter-menu-item csr-p" v-show="checkMatch(item.name)" v-on:click.stop="toggleSelection($event)" :class="{ selected : isSelected }">{{ item.name }}</div>',
 							data: function() {
 								return {
 									showing: true,
@@ -202,14 +274,13 @@ var pageModule = function() {
 									return check;
 								},
 								'toggleSelection': function(event) {
-									if (event) event.stopPropagation();
 									this.$data.isSelected = !this.$data.isSelected;
 									var n = this.item.name;
 									if (this.$data.isSelected) {	// Selecting
-										filters.addSelected(n);
+										filtersStore.addSelected(n);
 										eventBus.$emit('added-filter', n);
 									} else {	// Deselecting
-										filters.removeSelected(n);
+										filtersStore.removeSelected(n);
 										if (event) {
 											eventBus.$emit('removed-filter', n);
 										}
@@ -220,37 +291,6 @@ var pageModule = function() {
 					}
 				}
 			}
-		});
-
-		/**
-		 * Vue component defining the menu for each resume section.
-		 * The menu contains the functionality for showing and hiding all stories in that section.
-		 */
-		Vue.component('resume-section-menu', {
-			data: function() {
-				return {
-					visible: false,
-					propsAll: {
-						show: false,
-						hide: false
-					}
-				}
-			},
-			methods: {
-				'toggleList' : function() {
-					this.visible = !this.visible;
-				},
-				'toggleAllVisibility' : function(visible, event) {
-					event.stopPropagation();
-					this.propsAll.show = this.propsAll.show ? false : visible;		// Toggle show all
-					this.propsAll.hide = this.propsAll.hide ? false : !visible;		// Toggle hide all
-					this.$parent.toggleAllVisibility(visible);
-				}
-			},
-			props: ['section'],
-			template: '<div class="resume-section icon menu" :class="[section, {\'expanded\': this.visible}]" v-on:click="toggleList()"><ul class="section-menu-lst" v-show="this.visible">\
-			<li :class="{\'selected\': this.propsAll.show}" v-on:click="toggleAllVisibility(true, $event)">Show All</li><li :class="{\'selected\': this.propsAll.hide}" v-on:click="toggleAllVisibility(false, $event)">Hide All</li>\
-			</ul></div>'
 		});
 
 		/**
@@ -266,7 +306,7 @@ var pageModule = function() {
 				eventBus.$on('removed-filter', function(name) {
 					crd.checkVisibility(name, false);
 				});
-				eventBus.$on('change-settings', function(settings) {
+				eventBus.$on(['change-settings','reset-default-settings'], function() {
 					crd.checkVisibility();
 				});
 				eventBus.$on('remove-all-filters', function() {
@@ -275,18 +315,15 @@ var pageModule = function() {
 					crd.visible = true;
 					crd.changeNumChildren(initVisibility);	// If visibility changed, then change number of children of parent
 				});
+				
+				// Add the section type to the list of tags (+ capitalize first letter)
+				this.tags.push(this.type.charAt(0).toUpperCase() + this.type.slice(1));
 			},
 			data: function() {
 				return {
 					tags: this.content.tags.split(','),
 					visible: true,
 					matchedFilters: []
-				}
-			},
-			computed: {
-				isVisible : function() {
-					// Used to persist state if user chooses to show/hide all
-					return this.allVisible ? true : this.allHidden ? false : this.visible;
 				}
 			},
 			methods: {
@@ -296,24 +333,26 @@ var pageModule = function() {
 				 */
 				'checkVisibility' : function(filterName, added) {
 					var initVisibility = this.visible;
+					var matchSetting = settingsStore.settings.filterMatch;
 					if (added) {	// Adding a filter to list
 						if (this.tags.indexOf(filterName) > -1) {this.matchedFilters.push(filterName);}
 
-						this.visible = filterMenuApp.match === 'any' ? (this.matchedFilters.length > 0) : 
-							filterMenuApp.match === 'all' ? (this.matchedFilters.length === filters.selected.length) : true;
-
+						// Setting visibility of card based on settings and filters
+						this.visible = matchSetting === 'any' ? (this.matchedFilters.length > 0) : 
+							matchSetting === 'all' ? (this.matchedFilters.length === filtersStore.selected.length) : true;
 					} else {	// Removing a filter from the list OR changing settings
-						var filtLen = filters.selected.length;
-						if (filterName) {	// Removing a filter from the list
+						var filtLen = filtersStore.selected.length;
+						if (filterName && !Array.isArray(filterName)) {	// Removing one filter from the list
 							var i = this.matchedFilters.indexOf(filterName);
 							if (i > -1) {this.matchedFilters.splice(i, 1);}
 						}
 
+						// Setting final visibility
 						var mfLen = this.matchedFilters.length;
 						// Set visibility depending on settings and current filters
-						if (filterMenuApp.match === 'any') {
+						if (matchSetting === 'any') {
 							this.visible = (filtLen === 0) || !(mfLen === 0);
-						} else if (filterMenuApp.match === 'all') {
+						} else if (matchSetting === 'all') {
 							this.visible = (filtLen === 0) || (mfLen === filtLen);
 						}
 					}
@@ -345,8 +384,8 @@ var pageModule = function() {
 					template: '<div class="card-flex-container"><div class="card-row">{{content.description}}</div></div>'
 				}
 			},
-			props: ['content','type','allHidden','allVisible'],
-			template: '<div class="card" :class="[type]" v-show="isVisible"><component :is="type" :content="content"></component></div>'
+			props: ['content','type'],
+			template: '<div class="card" :class="[type]" v-if="visible"><component :is="type" :content="content"></component></div>'
 		});
 
 		/**
@@ -354,21 +393,45 @@ var pageModule = function() {
 		 * Contains cards for each resume story
 		 */
 		var resumeApp = new Vue({
-			el: '#resume',
+			el: '#main-page',
+			created: function() {
+				var res = this;
+				eventBus.$on('toggle-help', function() {
+					res.showWelcome = !res.showWelcome;
+					if (res.showWelcome) {
+						res.showHelp = true;
+					}
+				});
+			},
+			methods: {
+				'toggleFilterMenu': function() {
+					eventBus.$emit('toggle-filter-menu', true);
+				},
+				'addFilter': function(name) {
+					eventBus.$emit('added-filter-demo', name);
+				},
+				'toggleHelp': function() {
+					eventBus.$emit('toggle-help');
+				},
+				'printResume': function() {
+					eventBus.$emit('print-resume');
+				}
+			},
+			data: {
+				showWelcome: true,
+				showHelp: false,
+				fullHelpTexts : dataResults['help'].sections,
+			},
 			components: {
+				'help-section': {
+					props: ['sectiontext'],
+					template: '<div class="help-section-container" :class="sectiontext.class ? sectiontext.class : \'\'"><span class="help-text-title">{{ sectiontext.title }}</span><span class="help-text-body"><div v-html="sectiontext.body"></div></span></div>'
+				},
 				'resume-section' : {
 					data: function() {
 						return {
 							sectionContent: dataResults['personal'].resume[this.type],
-							setAllVisible: false,
-							setAllHidden: false
-						}
-					},
-					methods: {
-						// Change visibility for all cards within section
-						'toggleAllVisibility' : function(visible) {
-							this.setAllVisible = this.setAllVisible ? false : visible;
-							this.setAllHidden = this.setAllHidden ? false : !visible;
+							showSection: true
 						}
 					},
 					components: {
@@ -382,7 +445,7 @@ var pageModule = function() {
 							computed: {
 								// Hide the organization card if all children are hidden
 								checkEmpty: function() {
-									return (this.numChildren === 0 || this.allHidden);
+									return (this.numChildren === 0);
 								}
 							},
 							methods: {
@@ -390,13 +453,13 @@ var pageModule = function() {
 									this.numChildren = this.numChildren + ( check ? 1 : -1 );
 								},
 							},
-							props: ['content','allHidden','allVisible'],
-							template: '<div class="exp-org-card" v-show="!checkEmpty"><span class="exp-org-card-title">{{content.org}}, {{content.position}}</span><resume-card v-for="(e, index) in content.descriptions" :type="\'experience\'" :key="index" :content="e" @changeNumChildren=\'changeChildren\' :allHidden="allHidden" :allVisible="allVisible"></resume-card></div>'
+							props: ['content'],
+							template: '<div class="exp-org-card" v-show="!checkEmpty"><span class="exp-org-card-title">{{content.org}}, {{content.position}}</span><resume-card v-for="(e, index) in content.descriptions" :type="\'experience\'" :key="index" :content="e" @changeNumChildren=\'changeChildren\'></resume-card></div>'
 						}
 					},
 					props: ['type'],
-					template: '<div class="resume-section-container"><resume-section-menu :section="type"></resume-section-menu><div class="section-title" :class="type">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div><div class="section-body" :class="type">\
-						<component :is="type === \'experience\' ? \'experience-org-card\' : \'resume-card\'" v-for="(e, index) in this.sectionContent" :key="index" :type="type" :content="e" :allHidden="setAllHidden" :allVisible="setAllVisible"></component></div></div>'
+					template: '<div class="resume-section-container"><div class="section-title arrow" :class="[type,{\'closed down\': !showSection}, {\'up\': showSection}]" v-on:click="showSection = !showSection">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div><div class="section-body" :class="type" v-show="showSection">\
+						<component :is="type === \'experience\' ? \'experience-org-card\' : \'resume-card\'" v-for="(e, index) in this.sectionContent" :key="index" :type="type" :content="e"></component></div></div>'
 				}
 			}
 		});

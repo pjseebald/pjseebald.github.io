@@ -1,7 +1,9 @@
-{
-	"filterMatch" : {
+[
+	{
+		"name": "filterMatch",
 		"type": "radio",
 		"heading": "Stories must match:",
+		"defaultValue": "any",
 		"inputs": [{
 				"id": "any",
 				"value": "any",
@@ -14,4 +16,4 @@
 			}
 		]
 	}
-}
+]

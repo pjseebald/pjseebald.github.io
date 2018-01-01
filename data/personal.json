@@ -58,10 +58,10 @@
 				"descriptions": [
 					{"years": {"start": 2014, "end": 2014}, "description": "Led and evaluated students in fluid mechanics experimental laboratory sessions.", "tags": "Data Analysis,Purdue University,Mechanical Engineering,Teaching"},
 					{"years": {"start": 2013, "end": 2014}, "description": "Quantitatively determined measures of turbulence for the injection of supercritical fluids.", "tags": "Data Analysis,Purdue University,Mechanical Engineering,Time Series Analysis,Matlab"},
-					{"years": {"start": 2013, "end": 2014}, "description": "Wrote computational algorithm in MATLAB that identified fluid jet edge in thousands of high-resolution images, then calculated correlation-based length scales.", tags: "Data Analysis,Purdue University,Mechanical Engineering,Time Series Analysis,Matlab,Software Engineering"},
+					{"years": {"start": 2013, "end": 2014}, "description": "Wrote computational algorithm in MATLAB that identified fluid jet edge in thousands of high-resolution images, then calculated correlation-based length scales.", "tags": "Data Analysis,Purdue University,Mechanical Engineering,Time Series Analysis,Matlab,Software Engineering"},
 					{"years": {"start": 2013, "end": 2014}, "description": "Analyzed irregularly spaced time series data with advanced algorithms written in MATLAB.", "tags": "Data Analysis,Purdue University,Mechanical Engineering,Time Series Analysis,Matlab"},
 					{"years": {"start": 2013, "end": 2014}, "description": "Taught multiple class sessions of numerical methods and fluid mechanics lab for graduate students on and off campus.", "tags": "Data Analysis,Purdue University,Mechanical Engineering,Teaching"},
-					{"years": {"start": 2012, "end": 2013}, "description": "Designed and programmed data acquisition program for laboratory in LabVIEW.", "tags": "Data Analysis,Purdue University,Mechanical Engineering,Time Series Analysis,Matlab"},
+					{"years": {"start": 2012, "end": 2013}, "description": "Designed and programmed data acquisition program for laboratory in LabVIEW.", "tags": "Data Analysis,Purdue University,Mechanical Engineering,Time Series Analysis,Matlab"}
 				]
 			}
 		],

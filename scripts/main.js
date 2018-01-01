@@ -244,11 +244,6 @@ var pageModule = function() {
 						'filter-menu-item': {
 							created: function() {
 								var fmitem = this;
-								eventBus.$on('added-filter-demo', function(name) {
-									if (name === fmitem.item.name) {
-										fmitem.toggleSelection();
-									}
-								});
 								eventBus.$on('remove-all-filters', function() {
 									if (fmitem.isSelected) {
 										fmitem.toggleSelection();
@@ -406,9 +401,6 @@ var pageModule = function() {
 			methods: {
 				'toggleFilterMenu': function() {
 					eventBus.$emit('toggle-filter-menu', true);
-				},
-				'addFilter': function(name) {
-					eventBus.$emit('added-filter-demo', name);
 				},
 				'toggleHelp': function() {
 					eventBus.$emit('toggle-help');

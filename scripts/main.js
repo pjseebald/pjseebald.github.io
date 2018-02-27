@@ -1,7 +1,7 @@
 var pageModule = function() {
 	
 	// Start by loading the data from json files. Use the data to populate the components in the webpage.
-	const baseDataUrl = '../data';
+	const baseDataUrl = '../data/';
 	const dataUrls = {
 		help: 'help.json',
 		settings: 'settings.json',

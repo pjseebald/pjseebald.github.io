@@ -24,23 +24,6 @@ var pageModule = function() {
 	/**
 	 * Stores for managing variables referenced by multiple apps.
 	 * filters: manages which filters are selected in the menu to apply to resume stories.
-	 */	
-	var filters = {
-		selected: [],
-		addSelected: function(name) {
-			this.selected.push(name);
-		},
-		clearSelected: function() {
-			this.selected.length = 0;
-		},
-		removeSelected: function(name) {
-			this.selected.splice(this.selected.indexOf(name), 1);
-		}
-	}
-	
-	/**
-	 * Stores for managing variables referenced by multiple apps.
-	 * filters: manages which filters are selected in the menu to apply to resume stories.
 	 */
 	const filtersStore = {
 		selected: [],

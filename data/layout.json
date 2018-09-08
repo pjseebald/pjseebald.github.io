@@ -1,0 +1,12 @@
+{
+	"sections": [
+		{"name": "welcome", "resume-section": false, "text": "Welcome"}, 
+		{"name": "education", "resume-section": true, "text": "Education"}, 
+		{"name": "experience", "resume-section": true, "text": "Experience"}, 
+		{"name": "projects", "resume-section": true, "text": "Projects"}, 
+		{"name": "activities", "resume-section": true, "text": "Activities"}, 
+		{"name": "resume", "resume-section": true, "text": "Full Resume"}, 
+		{"name": "actions", "resume-section": false, "text": "Actions"}, 
+		{"name": "settings", "resume-section": false, "text": "Settings"}
+	]
+}

@@ -144,6 +144,10 @@
 		margin-bottom: 0.5em;
 	}
 	
+	.card-row ul {
+		padding-left: 1em;
+	}
+	
 	.card-transition-container {
 		width: 90%;
 	}

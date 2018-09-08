@@ -1,29 +1,24 @@
 {
 	"sections": [
 		{
-			"class": "help-icons-lst",
-			"title": "What do the icons mean?",
-			"body": "<ul><li class=\"help-icon-row\"><div id=\"help-filter-menu\" class=\"help icon\"></div><span class=\"help-icon-txt\">Opens/Closes the menu containing resum&#233; filters.</span></li><li class=\"help-icon-row\"><div id=\"help-print\" class=\"help icon\"></div><span class=\"help-icon-txt\">Print the resum&#233;.</span></li><li class=\"help-icon-row\"><div id=\"help-goto\" class=\"help icon\"></div><span class=\"help-icon-txt\">Opens my LinkedIn profile.</span></li><li class=\"help-icon-row\"><div id=\"help-help\" class=\"help icon\"></div><span class=\"help-icon-txt\">Displays welcome and help window.</span></li><li class=\"help-icon-row\"><div id=\"help-resume\" class=\"help icon\"></div><span class=\"help-icon-txt\">Opens the resum&#233;</span></li><li class=\"help-icon-row\"><div id=\"help-icon-settings\" class=\"help icon\"></div><span class=\"help-icon-txt\">Display settings for filter menu and resum&#233;.</span></li><li class=\"help-icon-row\"><div id=\"help-icon-clear\" class=\"help icon\"></div><span class=\"help-icon-txt\">Clear search text (in filter menu).</span></li></ul>"
-		},
-		{
 			"title": "What is this webpage?",
-			"body": "An interactive resum&#233; built with Vue.js. Select the filters or skills/categories that interest you and print it out to paper or PDF. That way you see only what you want to see."
+			"body": "An interactive resume built with Vue.js. Select the skills that interest you and print it out to paper or PDF. That way you see only what you want to see."
 		},
 		{
 			"title": "How to use this webpage?",
-			"body": "Open the filter menu, select the ones that interest you. Open the section-specific menus to show or hide all stories in one section. Read or print the resulting resum&#233; as desired."
+			"body": "Use the arrows on the side or the main menu bar to navigate to each section. Click the skills (tags) to view the related experiences and print the resulting resume as desired."
 		},
 		{
 			"title": "Why did you make this webpage?",
-			"body": "Many reasons:<ul><li>It's fun</li><li>It helped me learn my first Javascript framework (Vue.js).</li><li>My background is unique enough that I don't feel a traditional resum&#233; accurately represents my abilities.</li><li>Traditional resum&#233;s seem to be lacking in general. If you don't care about my Python projects (e.g.), then they shouldn't have to take up space.</li><li>This site could also help me easily tailor my resume for each job application if needed.</li>"
-		},
-		{
-			"title": "How can I contact you?",
-			"body": "Please send me a LinkedIn message. Use the icon in the top bar to access my LinkedIn page. Any feedback on this site (good and bad) is welcome!"
+			"body": "<ul><li>It's fun!</li><li>It helped me learn a Javascript framework (Vue.js).</li><li>My background is unique enough that I don't feel a traditional resume accurately represents my abilities.</li><li>Traditional resumes seem to be lacking in general. If you don't care about my Python projects (e.g.), then they shouldn't have to take up space.</li><li>This site could also help me easily build a custom resume with a focus on certain skills.</li></ul>"
 		},
 		{
 			"title": "Tell me more about your background.",
-			"body": "Please send me a LinkedIn message, because I always like to discuss my background and transition from mechanical to software engineering (yes, shocking that someone enjoys talking about themselves)."
+			"body": "I started out in mechanical engineering, and went to graduate school for my Ph.D. working with turbulence in an injected jet. However, a computational fluid dynamics course helped me realize how much I enjoy programming. After using online classes to develop knowledge in programming and data science, I took a job with IBM after graduating. Since then, I have enjoyed working as a software engineer on several different projects at IBM. For any other details or questions, please send me a message on <a class=\"csr-p\" rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://www.linkedin.com/in/paulseebald\">LinkedIn</a> and I would love to tell you more (yes, shocking that someone enjoys talking about themselves)!"
+		},
+		{
+			"title": "How can I contact you?",
+			"body": "Please send me a message on <a class=\"csr-p\" rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://www.linkedin.com/in/paulseebald\">LinkedIn</a>. A link to my LinkedIn page is also in the <a href=\"#actions\">Actions</a> section of this site . Any feedback on this webpage (good and bad) is welcome!"
 		}
 	]
 }

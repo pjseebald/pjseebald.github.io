@@ -7,12 +7,12 @@
 		"inputs": [{
 				"id": "any",
 				"value": "any",
-				"labelText": "ANY selected filters"
+				"labelText": "ANY selected tags"
 			},
 			{
 				"id": "all",
 				"value": "all",
-				"labelText": "ALL selected filters"
+				"labelText": "ALL selected tags"
 			}
 		]
 	}

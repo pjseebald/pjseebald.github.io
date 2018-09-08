@@ -9,7 +9,7 @@ body {
 	font-family: "Arial", sans-serif;
 }
 
-.icon, .menu, .button, .tooltip, .tooltip .tooltiptext, input, #fs-clear-filters, #fs-clear-filters:after, #title-filter-menu, #title-help, #title-goto, #welcome-container {
+.icon, .menu, .button, .tooltip, .tooltip .tooltiptext, input, .filter-list-item:not(.selected), .card-title-collapse, .no-print {
 	display: none;
 }
 
@@ -23,95 +23,89 @@ body {
 	height: auto;
 	text-align: center;
 	position: relative;
+	margin-bottom: 2em;
 }
 
 #title-name {
-	font-family: 'Lora', serif;
+	font-family: 'Lora', 'Times New Roman', serif;
 	font-size: 24px;
 	margin: 10px;
 	float: left;
 	text-align: left;
 }
 
-#title-filter-menu, #title-help, #title-goto {
-	height: 0;
-}
-
 #title-link-this, #title-link-print-linkedin {
-	/*float: right;*/
 	height: 100%;
 	text-align: right;
 }
 
-#title-link-print-linkedin {
-	clear: right;
+/* Container Headings */
+#education-container:before {
+	content: "Education";
 }
 
-/* Filter Menu */
-#filter-menu {
-	display: block !important;
-	font-family: 'Lora', 'sans-serif';
-	margin-top: 1em;
+#experience-container:before {
+	content: "Experience";
 }
 
-.category-name-container, .filter-menu-item:not(.selected), #filter-search {
+#activities-container:before {
+	content: "Activities";
+}
+
+#projects-container:before {
+	content: "Projects";
+}
+
+#education-container:before, #experience-container:before, #activities-container:before, #projects-container:before {
+	font-weight: bold;
+	font-size: 1.5em;
+	font-variant: small-caps;
+}
+
+#education-container, #experience-container, #projects-container {
+	margin-bottom: 2em;
+}
+
+.education .card-title {
+	width: 40%;
+}
+
+.exp-section-title {
+	margin-top: 0.5em;
+	margin-bottom: 0.25em;
+}
+
+#experience-container .card-title-text, #activities-container .card-title-text, #projects-container .card-title-text {
 	display: none;
 }
 
-#side-menu-title {
-	display: inline-block;
-	font-weight: bold;
-	text-transform: capitalize;
-}
-
-#side-menu-title:before {
-	content: "Selected ";
-}
-
-#side-menu-title:after {
-	content: ": ";
-}
-
-.filter-category, .filter-menu-item.selected {
+#education-container .card-title-text {
+	margin: 0.1em 0 0.1em 0;
 	display: inline-block;
 }
 
-.filter-menu-item.selected {
-	margin-left: 0.4em;
+.filter-list-item.selected {
+	list-style: none;
+	display: inline-block;
 }
 
-.filter-menu-item.selected:after {
-	content: " | "
+.filter-list-item.selected:before {
+	content: "Tags:";
+	margin-right: 1em;
 }
-/* End Filter Menu */
 
-#resume {
-	background-color: white;
-	clear: both;
-	display: block !important;
-	height: auto;
-	width: 100%;
+.filter-list-item.selected ~ .filter-list-item.selected:before {
+	content: ",";
+	margin-right: 0.5em;
 }
 
 .resume-section-container {
 	width: 100%;
 }
 
-.exp-org-card {
-	margin: 0px 0px 10px 10px;
-}
-
-.exp-org-card-title {
-	display: block;
-	font-family: 'Roboto', sans-serif;
-	font-size: 90%;
-	font-weight: bold;
-	padding: 0px 0px 2px 0px;
-}
-
 .card {
 	background-color: white;
-	display: inline-block;
+	display: flex;
 	height: auto;
 	
 	margin: 0px 0px 0px 10px;
@@ -148,9 +142,13 @@ body {
 	content: ", ";
 }
 
-.edu-yr:after {
-	content: ":";
+.edu-deg:after {
+	content: ",";
 	margin-right: 5px;
+}
+
+.edu-yr {
+	float: right;
 }
 
 .experience.card .exp-desc, .projects.card, .experience.card, .activities.card {
@@ -186,7 +184,7 @@ body {
 }
 
 .activities.card {
-	font-family: 'Roboto', sans-serif;
+	font-family: 'Roboto', 'Helvetica', sans-serif;
 	font-size: smaller;
 }
 
@@ -213,17 +211,9 @@ body {
 	white-space: nowrap;
 }
 
-.disp-ib {
-	display: inline-block;
-}
-
 .csr-p {
 	cursor: pointer;
 	cursor: hand;
-}
-
-.clr-gray {
-	color: #c0c0c0;
 }
 
 .f-w-b {

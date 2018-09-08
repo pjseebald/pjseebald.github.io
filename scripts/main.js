@@ -1,11 +1,21 @@
 var pageModule = function() {
 	
+	const svgSource = './img/icons.svg';
+	
+	const _showAllText = 'Show All';
+	const _hideAllText = 'Hide All';
+	
+	let getHash = function() {
+		return window.location.hash.substring(1);
+	};
+	
 	// Start by loading the data from json files. Use the data to populate the components in the webpage.
 	const baseDataUrl = '../data/';
 	const dataUrls = {
 		help: 'help.json',
 		settings: 'settings.json',
-		personal: 'personal.json'
+		personal: 'personal.json',
+		layout: 'layout.json'
 	};
 	const dataResults = {};
 
@@ -16,9 +26,10 @@ var pageModule = function() {
 		});
 	});
 
+	let results = {};
 	// After data is loaded, then build the page
 	$.when.apply($, deferreds).then(function() {
-		buildPage();
+		results = buildPage();
 	});
 	
 	/**
@@ -26,17 +37,31 @@ var pageModule = function() {
 	 * filters: manages which filters are selected in the menu to apply to resume stories.
 	 */
 	const filtersStore = {
+		selectedSections: {},
 		selected: [],
-		addSelected: function(name) {
-			if (this.selected.includes(name)) {
-				this.selected.push(name);
+		clearSelected: function(section) {
+			if (section in this.selectedSections) {
+				this.selectedSections[section].length = 0;
 			}
 		},
-		clearSelected: function() {this.selected.length = 0;},
-		removeSelected: function(name) {
-			if (this.selected.includes(name)) {
-				this.selected.splice(this.selected.indexOf(name), 1);
+		addSelectedFilter: function(name, section) {
+			if (name === _showAllText || name === _hideAllText) {
+				this.clearSelected(section);
+				return;
 			}
+			
+			if (!this.selectedSections.hasOwnProperty(section)) {
+				this.selectedSections[section] = [];
+			}
+			this.selectedSections[section].push(name);
+		},
+		removeSelectedFilter: function(name, section) {
+			if (name !== _showAllText && name !== _hideAllText) {
+				this.selectedSections[section].splice(this.selectedSections[section].indexOf(name), 1);
+			}
+		},
+		getFilters: function(section) {
+			return this.selectedSections.hasOwnProperty(section) ? this.selectedSections[section] : [];
 		}
 	};
 	
@@ -56,6 +81,18 @@ var pageModule = function() {
 		}
 	};
 	
+	const targetStore = {
+		currentTarget : '',
+		updateTarget : function(section) {
+			if (section) {
+				this.currentTarget = section;
+			} else {
+				let hash = getHash();
+				this.currentTarget = hash === '' ? 'welcome' : hash;
+			}
+		}
+	};
+	
 	/**
 	 * Builds the webpage by creating different components.
 	 * @return 		Nothing.
@@ -64,18 +101,23 @@ var pageModule = function() {
 		
 		// Apply default settings
 		settingsStore.resetDefaults(true);
-
-		const filterMenuCategories = [
-			{name: 'General', filterItems: dataResults['personal'].filters.general},
-			{name: 'Technical Skills', filterItems: dataResults['personal'].filters.skills.technical},
-			{name: 'Sections', filterItems: dataResults['personal'].filters.sections},
-			{name: 'Organizations', filterItems: dataResults['personal'].filters.organizations}
-		];
+		let sections = [];
+		for (index in dataResults['layout'].sections) {
+			sections.push(dataResults['layout'].sections[index].name);
+		}
+		targetStore.updateTarget();
 
 		/**
 		 * Vue app to store events between apps.
 		 */
 		let eventBus = new Vue({});
+		
+		/**
+		 * Event watcher for hash change
+		 */
+		window.onhashchange = function() {
+			eventBus.$emit('change-section', getHash());
+		};
 
 		/**
 		 * App for title section container. Hub for general actions of opening the filter menu, 
@@ -83,65 +125,391 @@ var pageModule = function() {
 		 */
 		let titleApp = new Vue({
 			el: '#title-container',
-			created: function() {
-				eventBus.$on('toggle-help', () => {this.showWelcome = !this.showWelcome;});
-				eventBus.$on('print-resume', () => {this.printResume();});
-			},
 			data: {
 				personTitle: dataResults['personal'].title,
-				showWelcome: true
-			},
-			methods: {
-				'toggleMenuPane' : function() {eventBus.$emit('toggle-filter-menu');},
-				'showHelp' : function() {
-					if (!this.showWelcome) {
-						eventBus.$emit('toggle-help');
-					}
-				},
-				'showResume' : function() {
-					if (this.showWelcome) {
-						eventBus.$emit('toggle-help');
-					}
-				},
-				'printResume' : function() {window.print();}
 			}
-		})
-
-		/**
-		 * App for the filter menu. 
-		 * Creates the sections of the menu and handles adding, removing, and searching for filters.
-		 */
-		let menuApp = new Vue({
-			el: '#filter-menu',
+		});
+		
+		let navApp = new Vue({
+			el: '#nav-container',
 			created: function() {
-				eventBus.$on('toggle-filter-menu', (openMenu) => {this.toggleMenuPane(openMenu);});
-				eventBus.$on('change-setting', (keyval) => {this.changeGlobalSetting(keyval);});
+				eventBus.$on('print-resume', () => {this.printResume();});
+				eventBus.$on('change-section', (section) => {this.updateSection(section);});
+				eventBus.$on('toggle-mobile-menu', () => {this.mobileHide = !this.mobileHide;});
+				eventBus.$on('close-mobile-menu', () => {this.mobileHide = true;});
 			},
 			data: {
-				filterCategories: filterMenuCategories,
-				settings: dataResults.settings,
-				filterSearchText: '',
-				fMenuShow: false,
-				showSettings: false
+				mobileHide : true,
+				curSection : targetStore.currentTarget,
+				navSections : dataResults['layout'].sections
+			},
+			computed: {
+				'currentSection' : function() {
+					return this.curSection;
+				}
 			},
 			methods: {
-				'clearSearchContents': function() {this.filterSearchText = '';},
-				'toggleMenuPane' : function(openMenu) {
-					this.fMenuShow = openMenu ? true : !this.fMenuShow;
-					this.showSettings = false;
+				'printResume' : function() {window.print();},
+				'updateSection' : function (section) {
+					this.curSection = section;
+				}
+			},
+			components: {
+				'nav-item' : {
+					methods: {
+						'updateSection' : function (section) {
+							eventBus.$emit('close-mobile-menu');
+						},
+						'matchesSection' : function(section) {
+							return this.cursection === section || (section === 'welcome' ? this.cursection === '' : false);
+						},
+					},
+					props: ['section','cursection'],
+					template: `<li class="csr-p main-nav-item transform-scale transition-transform disp-flex" v-on:click="updateSection(section.name)" :class="[{'selected' : matchesSection(section.name)},{'resume-nav-item' : section['resume-section']}]"><a class="main-nav-link disp-flex" :href="'#' + section.name"><div v-html="section.text"></div></a></li>`
+				}
+			}
+		});
+		
+		let mobileNavApp = new Vue({
+			el: '#mobile-nav-bar',
+			methods: {
+				'toggleMobileMenu': function() {
+					eventBus.$emit('toggle-mobile-menu');
 				},
-				'toggleSettingsPane' : function() {this.showSettings = !this.showSettings;},
-				'clearAllFilters': function() {
-					filtersStore.clearSelected();
-					eventBus.$emit('remove-all-filters');
+				'closeMobileMenu': function() {
+					eventBus.$emit('close-mobile-menu');
 				},
-				'changeGlobalSetting': function(setting) {
-					settingsStore.changeSetting(setting.key, setting.value);
-					eventBus.$emit('change-settings');
+				'printResume' : function() {
+					eventBus.$emit('print-resume');
+				}
+			}
+		});
+		
+		/**
+		 *	Card that uses an icon.
+		 */
+		Vue.component('icon-card', {
+			data : function() {
+				return {
+					svgSource : svgSource
+				};
+			},
+			methods: {
+				performFunction : function() {
+					switch (this.fxn) {
+						case 'print':
+							eventBus.$emit('print-resume');
+							break;
+					}
+				}
+			},
+			props : ['type', 'svgid', 'spantext', 'fxn', 'imgsrc'],
+			template : `<component :is="type" class="icon-card csr-p transform-scale transition-transform disp-flex" v-on:click="performFunction()">
+							<svg v-if="imgsrc === ''" :class="svgid + ' icon'" :aria-labelledby="svgid + '-svg-title ' + svgid + '-svg-desc'" role="img">
+								<use :xlink:href="svgSource + '#' + svgid" ></use>
+							</svg>
+							<img v-if="imgsrc !== ''" :src="imgsrc" class="img-icon"></img>
+							<span class="icon-card-text f-w-b">{{ spantext }}</span>
+						</component>`
+		});
+		
+		/**
+		 *	List of filters (or tags)
+		 *	This list contains filter-list-items as components
+		 */
+		Vue.component('filter-list', {
+			methods: {
+				'sectionEvent' : function(info) {
+					this.$emit('section-event', info);
+				}
+			},
+			props: ['filters','sectionType'],
+			template: `<ul class="resume-filter-list disp-flex" v-show="filters.length > 0">
+						<filter-list-item :sectionType="sectionType" v-for="(f, index) in filters" :key="index" :name="f" @section-event="sectionEvent"></filter-list-item>
+					</ul>`,
+			components: {
+				'filter-list-item': {
+					created : function() {
+						eventBus.$on('added-filter', (input) => {
+							if (this.name === _hideAllText || this.name === _showAllText) {
+								return;
+							}
+							
+							if (input.section === this.sectionType && input.filterName === this.name && !this.selected) {
+								this.selected = true;
+							}
+						});
+						eventBus.$on('removed-filter', (input) => {
+							if (input.section === this.sectionType && input.filterName === this.name && this.selected) {
+								this.selected = false;
+							}
+						});
+						eventBus.$on('clear-all-filters', (section) => {
+							if (section === this.sectionType) {
+								this.selected = false;
+							}
+						});
+					},
+					data: function() {
+						return {
+							selected : false,
+							hovering: false
+						}
+					},
+					methods: {
+						'toggleFilter' : function() {
+							let n = this.name;
+							let eventData = {'filterName' : n};
+							
+							if (this.name !== _showAllText && this.name !== _hideAllText) {
+								this.selected = !this.selected;
+								eventData.eventName = this.selected ? 'added-filter' : 'removed-filter';
+							} else {
+								eventBus.$emit('clear-all-filters', this.sectionType);
+								eventData.eventName = 'added-filter';
+							}
+
+							this.$emit('section-event', eventData);
+						},
+						'hoverFilter' : function() {
+							this.hovering = !this.hovering;
+							
+							let eventData = {};
+							if (this.hovering) {
+								eventData.eventName = 'hover-filter';
+								eventData.filterName = this.name;
+							} else {
+								eventData.eventName = 'hover-filter-end';
+							}
+							
+							this.$emit('section-event', eventData);
+						}
+					},
+					props: ['name','sectionType'],
+					template: `<li class="filter-list-item csr-p transition-transform" :class="{'selected': selected}" v-on:click.stop="toggleFilter()" v-on:mouseover="hoverFilter" v-on:mouseleave="hoverFilter">{{ name }}</li>`
+				}
+			}
+		});
+
+		/**
+		 * Vue component defining the resume card: the fundamental unit for displaying a resume story in any section
+		 * Has a general form and functionality with inner HTML specific to the type of resume section.
+		 */
+		Vue.component('resume-card', {
+			created: function() {
+				eventBus.$on('added-filter', (input) => {
+					if (input.section === this.specType) {
+						this.checkVisibility(input.filterName, true);
+					}
+				});
+				eventBus.$on('removed-filter', (input) => {
+					if (input.section === this.specType) {
+						this.checkVisibility(input.filterName, false);
+					}
+				});
+				eventBus.$on(['change-settings','reset-default-settings'], () => {
+					this.checkVisibility();
+				});
+				eventBus.$on('clear-all-filters', () => {
+					this.visible = true;
+				});
+				eventBus.$on('hover-filter', (input) => {
+					if (this.specType === input.section && this.matchesFilter(input.filterName)) {
+						this.hovering = true;
+					}
+				});
+				eventBus.$on('hover-filter-end', () => {
+					this.hovering = false;
+				});
+				eventBus.$on('removed-card', (input) => {
+					if ((input.section === this.specType) && (input.index == this.i)) {
+						this.visible = false;
+					}
+				});
+				
+				// Add the section type to the list of tags (+ capitalize first letter)
+				this.tags.push(this.type.charAt(0).toUpperCase() + this.type.slice(1));
+			},
+			data: function() {
+				return {
+					tags: this.content.tags ? this.content.tags.split(',') : [],
+					visible: true,
+					hovering: false,
+					expanded: true,
+					svgSource: svgSource
+				}
+			},
+			methods: {
+				/**
+				 * Method for checking if resume story is still visible after any event.
+				 * Used when adding, removing filters or changing settings
+				 */
+				'checkVisibility' : function(filterName, added) {
+					if (added) {	// Adding a filter to list
+						if (filterName === _showAllText) {
+							this.visible = true;
+							return;
+						}
+						else if (filterName === _hideAllText) {
+							this.visible = false;
+							return;
+						}
+					} 
+					this.visible = this.matchesRequiredFilters();
+				},
+				'matchesFilter' : function(filterName) {
+					return this.tags.includes(filterName);
+				},
+				'matchesRequiredFilters' : function() {
+					let matchSetting = settingsStore.settings['filterMatch'];
+					let curFilters = filtersStore.getFilters(this.specType);
+					let total = 0;
+					
+					// Figure out how many of current filters are in this card's tags.
+					for (let filter of curFilters) {
+						if (this.tags.includes(filter)) {
+							total++;
+						}
+					}
+
+					if (matchSetting === 'all') {
+						return (total === curFilters.length);
+					} else if (matchSetting === 'any') {
+						return (curFilters.length === 0 || total > 0);
+					}
+				},
+				'removeCard' : function() {
+					this.visible = false;
+					let output = {'index': this.i, 'section': this.specType};
+					eventBus.$emit('removed-card', output);
+				}
+			},
+			components: {
+				'education': {
+					props: ['content'],
+					template: `<div class="card-flex-container disp-flex">
+								<div class="card-row disp-flex">
+									<span class="edu-yr">{{ content.gradYear }}</span>
+									<span class="edu-deg">{{ content.degree }}</span>
+								</div>
+							</div>`
+				},
+				'experience': {
+					props: ['content'],
+					template: `<div class="card-flex-container disp-flex">
+								<div class="card-row disp-flex">
+									<div class="exp-desc">{{ content.description }}</div>
+								</div>
+							</div>`
+				},
+				'projects': {
+					props: ['content'],
+					template: `<div class="card-flex-container disp-flex">
+								<div class="card-row disp-flex">
+									<div v-html="content.description"></div>
+								</div>
+							</div>`
+				},
+				'activities': {
+					props: ['content'],
+					template: `<div class="card-flex-container disp-flex">
+								<div class="card-row disp-flex">{{content.description}}</div>
+							</div>`
+				},
+				'help': {
+					props: ['content'],
+					template: `<div class="card-flex-container disp-flex">
+								<div class="card-row disp-flex">
+									<div v-html="content.body"></div>
+								</div>
+							</div>`
+				}
+			},
+			props: ['content','type','specType','i'],
+			template: `<transition-group name="fading" mode="out-in" class="card-transition-container"><div class="card disp-flex" :class="[type, {'expanded': expanded}, {'hovering': hovering}]" key="i" v-if="visible">
+				<div class="card-title disp-flex">
+					<h3 class="card-title-text">{{ content.title }}</h3>
+					<div class="card-title-collapse csr-p" v-on:click="removeCard" tooltip="Hide" tooltip-left>
+						<svg class="icon collapse-icon-svg" aria-labelledby="collapse-svg-title collapse-svg-desc" role="img">
+							<use :xlink:href="svgSource + '#collapse'"></use>
+						</svg>
+					</div>
+				</div>
+				<component key="desc" :is="type" :content="content"></component>
+			</div></transition-group>`
+		});
+
+		/**
+		 * App for resume section.
+		 * Contains cards for each resume story
+		 */
+		let resumeApp = new Vue({
+			el: '#mpc-wrapper',
+			created: function() {
+				eventBus.$on('change-resume-section', (type) => {
+					this.showSection = type;
+				});
+				eventBus.$on('change-section', (section) => {
+					this.updateSection(section);
+				});
+
+			},
+			methods: {
+				'toggleHelp': function() {
+					eventBus.$emit('toggle-help');
+				},
+				'printResume' : function() {window.print();},
+				'changeShowSection' : function(section) {
+					this.showSection = section;
+				},
+				'changeSection' : function(section) {
+					eventBus.$emit('change-section', section);
+				},
+				'updateSection' : function(section) {
+					this.curSection = section;
 				},
 				'resetDefaultSettings': function() {
 					settingsStore.resetDefaults();
 					eventBus.$emit('reset-default-settings');
+				}
+			},
+			watch : {
+				route : function() {
+					eventBus.$emit('change-section', getHash());
+				}
+			},
+			data: {
+				settings: dataResults.settings,
+				showHelp : false,
+				fullHelpTexts : dataResults['help'].sections,
+				curSection : targetStore.currentTarget,
+				route : window.location.hash,
+				beginningSection: true,
+				endSection: false,
+				fullResume: dataResults['personal'].resume,
+			},
+			computed: {
+				currentHash : function() {
+					let s = this.curSection;
+					return window.location.hash.substring(1);
+				},
+				currentSection : function() {
+					return this.curSection;
+				},
+				curSectionIndex: function() {
+					return sections.indexOf(this.currentSection);
+				},
+				nextSection: function() {
+					let i = this.curSectionIndex;
+					let next = i+1;
+					this.endSection = (next === sections.length);
+					return (this.endSection) ? '' : sections[next];
+				},
+				prevSection: function() {
+					let i = this.curSectionIndex;
+					let prev = i-1;
+					this.beginningSection = (prev === -1);
+					return (this.beginningSection) ? '' : sections[prev];
 				}
 			},
 			components: {
@@ -164,7 +532,12 @@ var pageModule = function() {
 								}
 							},
 							methods: {
-								updateSettingValue: function(newValue) {this.curSettingValue = newValue ? newValue : settingsStore.defaults[this.settingName];}
+								updateSettingValue: function(newValue) {
+									this.curSettingValue = newValue ? newValue : settingsStore.defaults[this.settingName];
+									if (newValue) {
+										settingsStore.changeSetting(this.settingName, this.curSettingValue);
+									}
+								}
 							},
 							props: ['inputs','settingName'],
 							template: `<ul>
@@ -181,7 +554,7 @@ var pageModule = function() {
 											get: function() {return this.curValue;},
 											set: function(newValue) {
 												this.$emit('changeValue', newValue);
-												eventBus.$emit('change-setting', {key: this.settingName, value: newValue});
+												eventBus.$emit('change-settings', {key: this.settingName, value: newValue});
 											}
 										}
 									},
@@ -192,274 +565,74 @@ var pageModule = function() {
 						}
 					}
 				},
-				'filter-menu-category': {
-					props: ['category','ftext'],
-					template: `<div class="filter-category" :class="{'expanded' : this.expanded}" v-show="!checkEmpty">
-								<div class="category-name-container" v-on:click="toggleExpand()">
-									<span class="filter-category-icon icon"></span>
-									<span class="filter-category-name">{{ category.name }}</span>
-								</div>
-								<filter-menu-item v-show="expanded || ftext !== ''" v-for="(fi, index) in category.filterItems" v-bind:item="fi" :key="index" :ftextitem="ftext" @changeNumChildren="changeChildren">
-								</filter-menu-item>
-							</div>`,
-					methods: {
-						'changeChildren': function(addChild) {
-							this.numChildren = this.numChildren + ( addChild ? 1 : -1 );
-							if (!this.expanded) {
-								this.toggleExpand();
-							}
-						},
-						'toggleExpand': function() {this.expanded = !this.expanded;}
-					},
-					data: function() {
-						return {
-							numChildren: this.category.filterItems.length,
-							expanded: true,
-							breakToggleLoop: false
-						}
-					},
-					computed: {
-						checkEmpty: function() {return (this.numChildren === 0);}
-					},
-					components: {
-						'filter-menu-item': {
-							created: function() {
-								eventBus.$on('remove-all-filters', () => {
-									if (fmitem.isSelected) {
-										fmitem.toggleSelection();
-									}
-								});
-							},
-							props: ['item','ftextitem'],
-							template: `<div class="filter-menu-item csr-p" v-show="checkMatch(item.name)" v-on:click.stop="toggleSelection($event)" :class="{ selected : isSelected }">{{ item.name }}</div>`,
-							data: function() {
-								return {
-									showing: true,
-									isSelected: false
-								}
-							},
-							methods: {
-								'checkMatch': function(value) {
-									let matchValue = this.ftextitem.toLowerCase();
-									let doesMatch = matchValue === '' ? true : value.toLowerCase().includes(matchValue) ? true : false;
-									if (doesMatch ^ this.$data.showing) {
-										this.$data.showing = doesMatch;
-										this.$emit('changeNumChildren', doesMatch);
-									}
-									return doesMatch;
-								},
-								'toggleSelection': function(event) {
-									this.$data.isSelected = !this.$data.isSelected;
-									let n = this.item.name;
-									if (this.$data.isSelected) {	// Selecting
-										filtersStore.addSelected(n);
-										eventBus.$emit('added-filter', n);
-									} else {	// Deselecting
-										filtersStore.removeSelected(n);
-										if (event) {
-											eventBus.$emit('removed-filter', n);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		});
-
-		/**
-		 * Vue component defining the resume card: the fundamental unit for displaying a resume story in any section
-		 * Has a general form and functionality with inner HTML specific to the type of resume section.
-		 */
-		Vue.component('resume-card', {
-			created: function() {
-				eventBus.$on('added-filter', (name) => {
-					this.checkVisibility(name, true);
-				});
-				eventBus.$on('removed-filter', (name) => {
-					this.checkVisibility(name, false);
-				});
-				eventBus.$on(['change-settings','reset-default-settings'], () => {
-					this.checkVisibility();
-				});
-				eventBus.$on('remove-all-filters', () => {
-					this.matchedFilters.length = 0;
-					let initVisibility = this.visible;
-					this.visible = true;
-					this.changeNumChildren(initVisibility);	// If visibility changed, then change number of children of parent
-				});
-				
-				// Add the section type to the list of tags (+ capitalize first letter)
-				this.tags.push(this.type.charAt(0).toUpperCase() + this.type.slice(1));
-			},
-			data: function() {
-				return {
-					tags: this.content.tags.split(','),
-					visible: true,
-					matchedFilters: []
-				}
-			},
-			methods: {
-				/**
-				 * Method for checking if resume story is still visible after any event.
-				 * Used when adding, removing filters or changing settings
-				 */
-				'checkVisibility' : function(filterName, added) {
-					let initVisibility = this.visible;
-					let matchSetting = settingsStore.settings.filterMatch;
-					if (added) {	// Adding a filter to list
-						if (this.tags.includes(filterName)) {this.matchedFilters.push(filterName);}
-
-						// Setting visibility of card based on settings and filters
-						this.visible = matchSetting === 'any' ? (this.matchedFilters.length > 0) : 
-							matchSetting === 'all' ? (this.matchedFilters.length === filtersStore.selected.length) : true;
-					} else {	// Removing a filter from the list OR changing settings
-						let filtLen = filtersStore.selected.length;
-						if (filterName && !Array.isArray(filterName) && this.matchedFilters.includes(filterName)) {	// Removing one filter from the list
-							this.matchedFilters.splice(this.matchedFilters.indexOf(filterName), 1);
-						}
-
-						// Setting final visibility
-						let mfLen = this.matchedFilters.length;
-						// Set visibility depending on settings and current filters
-						if (matchSetting === 'any') {
-							this.visible = (filtLen === 0) || !(mfLen === 0);
-						} else if (matchSetting === 'all') {
-							this.visible = (filtLen === 0) || (mfLen === filtLen);
-						}
-					}
-
-					this.changeNumChildren(initVisibility);
-				},
-				'changeNumChildren' : function(initVisibility) {
-					// Check if visibility changed. If so, emit the 'changeNumChildren' event.
-					if (initVisibility ? !this.visible : this.visible) {		// XOR ternary operation -- if visibility changes from initial
-						this.$emit('changeNumChildren', this.visible);
-					}
-				}
-			},
-			components: {
-				'education': {
-					props: ['content'],
-					template: `<div class="card-flex-container">
-								<div class="card-row">
-									<span class="edu-org f-w-b">{{ content.org }}</span>
-									<span class="edu-yr">{{ content.gradYear }}</span>
-								</div>
-								<div class="card-row">
-									<span class="edu-deg">{{ content.degree }}</span>
-								</div>
-							</div>`
-				},
-				'experience': {
-					props: ['content'],
-					template: `<div class="card-flex-container">
-								<div class="card-row">
-									<div class="exp-desc">{{ content.description }} <span class="exp-yr">[{{ content.years.start }} - {{ content.years.end }}]</span></div>
-								</div>
-							</div>`
-				},
-				'projects': {
-					props: ['content'],
-					template: `<div class="card-flex-container">
-								<div class="card-row">
-									<div v-html="content.description"></div>
-								</div>
-							</div>`
-				},
-				'activities': {
-					props: ['content'],
-					template: `<div class="card-flex-container">
-								<div class="card-row">{{content.description}}</div>
-							</div>`
-				}
-			},
-			props: ['content','type'],
-			template: `<div class="card" :class="[type]" v-if="visible"><component :is="type" :content="content"></component></div>`
-		});
-
-		/**
-		 * App for resume section.
-		 * Contains cards for each resume story
-		 */
-		let resumeApp = new Vue({
-			el: '#main-page',
-			created: function() {
-				eventBus.$on('toggle-help', () => {
-					this.showWelcome = !this.showWelcome;
-					if (this.showWelcome) {
-						this.showHelp = true;
-					}
-				});
-			},
-			methods: {
-				'toggleFilterMenu': function() {
-					eventBus.$emit('toggle-filter-menu', true);
-				},
-				'toggleHelp': function() {
-					eventBus.$emit('toggle-help');
-				},
-				'printResume': function() {
-					eventBus.$emit('print-resume');
-				}
-			},
-			data: {
-				showWelcome: true,
-				showHelp: false,
-				fullHelpTexts : dataResults['help'].sections,
-			},
-			components: {
-				'help-section': {
-					props: ['sectiontext'],
-					template: `<div class="help-section-container" :class="sectiontext.class ? sectiontext.class : ''">
-								<span class="help-text-title">{{ sectiontext.title }}</span>
-								<span class="help-text-body">
-									<div v-html="sectiontext.body"></div>
-								</span>
-							</div>`
-				},
 				'resume-section' : {
 					data: function() {
 						return {
-							sectionContent: dataResults['personal'].resume[this.type],
-							showSection: true
+							showAllText: _showAllText,
+							hideAllText: _hideAllText,
+							sectionContent: dataResults['personal'].resume[this.type]
 						}
 					},
-					components: {
-						// Define experience stories within an organization. Use this component to represent organization with cards inside it.
-						'experience-org-card': {
-							data: function() {
-								return {
-									numChildren: this.content.descriptions.length
+					methods: {
+						'sectionEvent' : function(info) {
+							info.section = this.filterSectionName;
+							if (info.eventName === 'added-filter') {
+								filtersStore.addSelectedFilter(info.filterName, this.filterSectionName);
+							} else if (info.eventName === 'removed-filter') {
+								filtersStore.removeSelectedFilter(info.filterName, this.filterSectionName);
+							}
+							
+							eventBus.$emit(info.eventName, info);
+						}
+					},
+					computed: {
+						cardContent: function() {
+							return (this.type === 'experience' ? this.sectionContent[this.i]['descriptions'] : this.sectionContent);
+						},
+						sectionTagList: function() {
+							let sectionTags = [];
+							let contents = this.cardContent;
+
+							for (let i = 0; i < contents.length; i++) {
+								let content = contents[i];
+								let tags = content.tags.split(',');
+								for (let j = 0; j < tags.length; j++) {
+									let tag = tags[j];
+									if (!(tag === "") && !sectionTags.includes(tag)) {
+										sectionTags.push(tag);
+									}
 								}
-							},
-							computed: {
-								// Hide the organization card if all children are hidden
-								checkEmpty: function() {return (this.numChildren === 0);}
-							},
-							methods: {
-								'changeChildren': function(addChild) {this.numChildren = this.numChildren + ( addChild ? 1 : -1 );},
-							},
-							props: ['content'],
-							template: `<div class="exp-org-card" v-show="!checkEmpty">
-										<span class="exp-org-card-title">{{content.org}}, {{content.position}}</span>
-										<resume-card v-for="(e, index) in content.descriptions" :type="'experience'" :key="index" :content="e" @changeNumChildren='changeChildren'></resume-card>
-									</div>`
+							}
+
+							sectionTags.sort();
+							return sectionTags;
+						},
+						filterSectionName: function() {
+							return this.type === 'experience' ? this.type + "-" + this.sectionContent[this.i]['org'] : this.type;
 						}
 					},
-					props: ['type'],
-					template: `<div class="resume-section-container">
-								<div class="section-title arrow" :class="[type,{'closed down': !showSection}, {'up': showSection}]" v-on:click="showSection = !showSection">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
-								<div class="section-body" :class="type" v-show="showSection">
-									<component :is="type === 'experience' ? 'experience-org-card' : 'resume-card'" v-for="(e, index) in this.sectionContent" :key="index" :type="type" :content="e"></component>
+					props: ['type','i'],
+					template: `<section class="resume-section-container disp-flex">
+								<h2 class="resume-container-title no-print">{{type.charAt(0).toUpperCase() + type.slice(1)}}</h2>
+								<h3 v-if="type === 'experience'" class="exp-section-title">{{ sectionContent[i]['org'] + ', ' + sectionContent[i]['position'] }}</h3>
+								<filter-list :filters="[showAllText, hideAllText]" :sectionType="type" class="filter-list-all no-print" @section-event="sectionEvent"></filter-list>
+								<filter-list :filters="sectionTagList" :sectionType="type" @section-event="sectionEvent"></filter-list>
+								<div class="section-body disp-flex" :class="type">
+									<div class="card-container disp-flex">
+										<resume-card v-for="(e, index) in cardContent" :key="index" :type="type" :specType="filterSectionName" :content="e" :i="index"></resume-card>
+									</div>
 								</div>
-							</div>`
+							</section>`
 				}
+				
 			}
 		});
+		
+		return {
+			'resumeApp' : resumeApp,
+			'navApp' : navApp,
+			'titleApp' : titleApp
+		};
 	}
-
-return {};
 
 } ();

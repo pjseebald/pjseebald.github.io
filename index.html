@@ -11,94 +11,127 @@
 
 <body>
 
-<div id="page-container">
-<div id="title-container">
-	<div id="title-name" class="f-w-b">{{ personTitle }}</div>
-	<div id="title-icon-container">
-		<div id="title-link-this">https://pseebald.github.io</div>
-		<div id="title-link-print-linkedin">https://www.linkedin.com/in/paulseebald</div>
-		<div id="title-filter-menu" class="icon disp-ib" tooltip="Filter Menu" tooltip-bottom v-on:click="toggleMenuPane(this)"></div>
-		<div id="title-print" class="icon disp-ib" tooltip="Print" tooltip-bottom v-on:click="printResume()"></div>
-		<div id="title-goto" class="icon disp-ib" tooltip="LinkedIn" tooltip-bottom><a rel="noopener noreferrer" target="_blank" href="https://www.linkedin.com/in/paulseebald"><span class="link-spanner"></span></a></div>
-		<div id="title-help" class="icon disp-ib" :class="{'activated': showWelcome}" tooltip="Help" tooltip-bottom v-on:click="showHelp()"></div>
-		<div id="title-resume" class="icon disp-ib" :class="{'activated': !showWelcome}" tooltip="Resume" tooltip-bottom v-on:click="showResume()"></div>
+<div id="page-container" class="disp-flex">
+	<div id="title-container" class="disp-flex">
+		<div id="title-name" class="f-w-b">{{ personTitle }}</div>
+		<div id="title-icon-container" class="print-only">
+			<div id="title-link-this">https://pjseebald.github.io</div>
+			<div id="title-link-print-linkedin">https://www.linkedin.com/in/paulseebald</div>
+		</div>
 	</div>
-</div>
 
-<div id="main-container">
-<div id="main-page">
-	<transition-group name="fade-together">
-	<div id="welcome-container" v-show="showWelcome" key="welcome">
-		<div id="welcome-title">
-			<span id="welcome-title-welcome">Welcome to my </span><span id="welcome-title-resume">Interactive Resum&#233;</span>
-		</div>
-		<span id="personal-intro">I am a software engineer with a mechanical engineering background and a passion for finding solutions through code.</span>
-		<button id="open-resume" class="button" v-on:click="toggleHelp()">
-			See My Resum&#233;
-		</button>
-		<div class="welcome-intro">
-			<span>This <span class="f-w-b">Interactive Resum&#233; </span>is a way for you to see the parts of my resum&#233; that you want to see. How?</span>
-			<ul class="welcome-steps">
-				<li><span class="welcome-step-desc" v-on:click="toggleFilterMenu()">Open filter menu. <div id="help-filter-menu" class="help icon"></div></span> (Icons at the top of the screen)</li>
-				<li><span class="welcome-step-desc note">Select the skills or categories</span> that interest you from the menu (e.g. Software Engineering).</li>
-				<li><span class="f-w-b">Note: </span><span class="welcome-step-desc note">Click help <div id="help-help" class="help icon"></div></span> when viewing resum&#233; to return to this window.</li>
-				<li><span class="welcome-step-desc" v-on:click="toggleHelp()">View the resum&#233; <div id="help-resume" class="help icon"></div></span>that shows stories matching your filter selection(s).</li>
-				<li><span class="welcome-step-desc" v-on:click="printResume()">Print it out <div id="help-print" class="help icon"></div></span> to PDF or paper!</li>
-			</ul>
-		</div>
-		<button id="open-help" class="button arrow" :class="[{'open up': showHelp},{'down': !showHelp}]" v-on:click="showHelp = !showHelp">
-			{{ showHelp ? 'Close Help' : 'Open Help'}}
-		</button>
-		<transition name="fade">
-		<div id="main-help" v-show="showHelp">
-			<help-section v-for="(ht, index) in fullHelpTexts" 
-				v-bind:sectiontext="ht" 
+
+
+<div id="main-container" class="disp-flex">
+
+	<nav id="nav-container" :class="{'mobile-hide': mobileHide}" class="no-print">
+		<ul id="main-nav" class="disp-flex">
+			<nav-item v-for="(s, index) in navSections" 
+				:section="s"
+				:cursection="currentSection"
 				:key="index">
-			</help-section>
-		</div>
-		</transition>
-	</div>
-	<div id="resume" v-show="!showWelcome" key="resume">
-		<resume-section :type="'education'"></resume-section>
-		<resume-section :type="'experience'"></resume-section>
-		<resume-section :type="'projects'"></resume-section>
-		<resume-section :type="'activities'"></resume-section>
-	</div>
-	</transition-group>
-</div>
-<div id="filter-menu" class="menu" v-show="fMenuShow" @changeSetting="changeGlobalSetting">
-	<span class="settings-icon icon" :class="{'show-settings' : showSettings}" :tooltip="showSettings ? 'Filters' : 'Settings'" tooltip-right v-on:click="toggleSettingsPane()"></span>
-	<span class="close icon" tooltip="Close" tooltip-left v-on:click="toggleMenuPane()"></span>
-	<div id="menu-block">
-		<transition-group name="fade-together">
-		<div id="filter-menu-container" v-show="!showSettings" key="filters">
-			<div id="side-menu-title" class="filters">Filters</div>
-			<div id="filter-search">
-				<input id="filter-input" class="va-m" v-model="filterSearchText" placeholder="Find a filter">
-				<span id="filter-icon-clear" class="icon tooltip" tooltip="Clear Search" tooltip-left v-on:click="clearSearchContents"></span>
+			</nav-item>
+		</ul>
+	</nav>
+		
+	
+	<div id="main-page" class="disp-flex">
+	
+		<div id="welcome" class="proxy-anchor"></div>
+		<div id="education" class="proxy-anchor"></div>
+		<div id="experience" class="proxy-anchor"></div>
+		<div id="projects" class="proxy-anchor"></div>
+		<div id="activities" class="proxy-anchor"></div>
+		<div id="resume" class="proxy-anchor"></div>
+		<div id="actions" class="proxy-anchor"></div>
+		<div id="settings" class="proxy-anchor"></div>
+		
+		<div id="mpc-wrapper" class="disp-flex">
+			
+			<div id="left-nav-arrow-wrapper" class="csr-p no-print" v-show="!beginningSection">
+				<a :href="'#' + prevSection" id="left-nav-arrow"></a>
 			</div>
-			<button id="clear-all-filters" class="button" v-on:click="clearAllFilters()">Clear All</button>
-			<filter-menu-category 
-				v-for="(fc, index) in filterCategories" 
-				v-bind:category="fc" 
-				:key="index"
-				:ftext="filterSearchText">
-			</filter-menu-category>
+			
+			<div id="main-page-container" class="transform-translatex transition-transform disp-flex">
+				<div id="welcome-container" class="page no-print transform-scale transition-transform">
+					<div id="welcome-title">
+						<span id="welcome-title-welcome">Welcome to my </span><span id="welcome-title-resume">Interactive Resume</span>
+					</div>
+					<div id="profile-photo-container" class="disp-flex">
+						<img id="profile-photo" src="img\paul_profile.png"></img>
+					</div>
+					<span id="personal-intro">I am a software engineer with a mechanical engineering background and a passion for finding solutions through code.</span>
+					<span id="intro-desc">This <span class="f-w-b">Interactive Resume </span>lets you focus on what you want to see in my resume.</span>
+					<div class="welcome-intro disp-flex">
+						<ul class="welcome-steps">
+							<li><span class="welcome-step-desc note">Go to any section</span> of my resume from the menu.</li>
+							<li><span class="welcome-step-desc note">Select any skills or tags</span> that you are interested in.</li>
+							<li><span class="welcome-step-desc csr-p" v-on:click="printResume()">Print the resume </span>at any time to PDF or paper!</li>
+						</ul>
+					</div>
+					<div id="main-help" class="disp-flex">
+						<resume-card v-for="(c, index) in fullHelpTexts"
+							:type="'help'" :content=c :key="index">
+						</resume-card>
+					</div>
+				</div>
+				<div id="education-container" class="page transform-scale transition-transform">
+					<resume-section :type="'education'"></resume-section>
+				</div>
+				<div id="experience-container" class="page transform-scale transition-transform">
+					<resume-section v-for="(exp, index) in fullResume['experience']" :i="index" :type="'experience'" :key="index"></resume-section>
+				</div>
+				<div id="projects-container" class="page transform-scale transition-transform">
+					<resume-section :type="'projects'"></resume-section>
+				</div>
+				<div id="activities-container" class="page transform-scale transition-transform">
+					<resume-section :type="'activities'"></resume-section>
+				</div>
+				<div id="resume-container" class="page no-print transform-scale transition-transform">
+					<resume-section :type="'education'"></resume-section>
+					<resume-section v-for="(exp, index) in fullResume['experience']" :i="index" :type="'experience'" :key="index"></resume-section>
+					<resume-section :type="'projects'"></resume-section>
+					<resume-section :type="'activities'"></resume-section>
+				</div>
+				<div id="actions-container" class="page no-print transform-scale transition-transform disp-flex">
+					<section class="card-container disp-flex">
+						<icon-card type="span" spantext="Print Resume" svgid="print" fxn="print" imgsrc=""></icon-card>
+						<icon-card type="a" href="#settings" spantext="Settings" svgid="gear" imgsrc=""></icon-card>
+						<icon-card type="a" rel="noopener noreferrer" target="_blank" href="https://www.linkedin.com/in/paulseebald" spantext="My LinkedIn&trade; Page" svgid="" imgsrc="img/linkedin_logo.png"></icon-card>
+					</section>
+				</div>
+				<div id="settings-container" class="page no-print transform-scale transition-transform">
+					<button id="reset-default-settings" class="button" v-on:click="resetDefaultSettings()">Reset Defaults</button>
+					<div id="settings-menu-container" class="disp-flex">
+						<setting-item v-for="(settingItem, index) in settings" :item="settingItem" :key="index"></setting-item>
+					</div>
+				</div>
+
+			</div>
+			
+			<div id="right-nav-arrow-wrapper" class="csr-p no-print" v-show="!endSection">
+				<a :href="'#' + nextSection" id="right-nav-arrow" class="csr-p"></a>
+			</div>
 		</div>
-		<div id="settings-menu-container" v-show="showSettings" key="settings">
-			<div id="side-menu-title" class="settings">Settings</div>
-			<button id="reset-default-settings" class="button" v-on:click="resetDefaultSettings()">Reset Defaults</button>
-			<setting-item v-for="(settingItem, index) in settings" :item="settingItem" :key="index"></setting-item>
-		</div>
-		</transition>
+		
 	</div>
-</div>
+	
+	<div id="mobile-nav-bar" class="no-print disp-flex">
+		<div id="mobile-print-icon" class="csr-p" v-on:click="printResume()">
+			<svg class="print icon" aria-labelledby="print-svg-title print-svg-desc" role="img">
+				<use xlink:href="img/icons.svg#print" id="print-mobile-nav"></use>
+			</svg>
+		</div>
+		<label class="menu-control-btn csr-p" v-on:click="toggleMobileMenu()">&#9776;</label>
+		<a href="#welcome" id="mobile-help-icon" class="csr-p" v-on:click="closeMobileMenu()">?</a>
+	</div>
+
 </div>
 
 </div>
 
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-<script src="./scripts/vue.min.js"></script>
+<script src="./scripts/vue.js"></script>
 <script src="./scripts/main.js" type="text/javascript"></script>
 </html>

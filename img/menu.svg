@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg x="0px" y="0px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xmlns="http://www.w3.org/2000/svg" xml:space="preserve">
-
-<g>
-	<path d="M8,8 v8 h48 v-8 h-48"/>
-	<path d="M8,28 v8 h48 v-8 h-48"/>
-	<path d="M8,48 v8 h48 v-8 h-48"/>
-</g>
-</svg>

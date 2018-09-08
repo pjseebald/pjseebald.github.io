@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg x="0px" y="0px" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" xml:space="preserve">
-
-<g>
-	<path fill="none" stroke="black" stroke-width="4" d="M2,2 h76 v76 h-76 z"/>
-	<path stroke="black" stroke-width="3" d="M25,15 h30"/>
-	<path stroke="black" stroke-width="2" d="M10,30 h60 M10,40 h60 M10,50 h60 M10,60 h60" />
-</g>
-</svg>

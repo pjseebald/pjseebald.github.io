@@ -160,7 +160,7 @@ var pageModule = function() {
 					try {
 						window.print();
 					} catch(err) {
-						let message = 'Javascript window print function does not work. Print directly from browser, if possible.\n\nClick menu button below to close this message.';
+						let message = 'Javascript window print function does not work on your browser. Print directly from browser, if possible.\n\nClick menu button below to close this message.';
 						this.mobileHide = false;
 						this.mobileErrorMessage = message;
 					}

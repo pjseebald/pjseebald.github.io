@@ -135,11 +135,18 @@ var pageModule = function() {
 			created: function() {
 				eventBus.$on('print-resume', () => {this.printResume();});
 				eventBus.$on('change-section', (section) => {this.updateSection(section);});
-				eventBus.$on('toggle-mobile-menu', () => {this.mobileHide = !this.mobileHide;});
-				eventBus.$on('close-mobile-menu', () => {this.mobileHide = true;});
+				eventBus.$on('toggle-mobile-menu', () => {
+					this.mobileHide = !this.mobileHide;
+					this.mobileErrorMessage = '';
+				});
+				eventBus.$on('close-mobile-menu', () => {
+					this.mobileHide = true;
+					this.mobileErrorMessage = '';
+				});
 			},
 			data: {
 				mobileHide : true,
+				mobileErrorMessage: '',
 				curSection : targetStore.currentTarget,
 				navSections : dataResults['layout'].sections
 			},
@@ -149,7 +156,15 @@ var pageModule = function() {
 				}
 			},
 			methods: {
-				'printResume' : function() {window.print();},
+				'printResume' : function() {
+					try {
+						window.print();
+					} catch(err) {
+						let message = 'Javascript window print function does not work. Print directly from browser, if possible.\n\nClick menu button below to close this message.';
+						this.mobileHide = false;
+						this.mobileErrorMessage = message;
+					}
+				},
 				'updateSection' : function (section) {
 					this.curSection = section;
 				}
@@ -458,7 +473,6 @@ var pageModule = function() {
 				'toggleHelp': function() {
 					eventBus.$emit('toggle-help');
 				},
-				'printResume' : function() {window.print();},
 				'changeShowSection' : function(section) {
 					this.showSection = section;
 				},

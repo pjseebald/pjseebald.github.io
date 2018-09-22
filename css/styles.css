@@ -78,6 +78,11 @@
 	
 	#main-help {
 		margin: 0;
+		padding-bottom: 4em;
+	}
+	
+	.resume-section-container:last-child {
+		padding-bottom: 3em;
 	}
 	
 	#left-nav-arrow-wrapper:before, #right-nav-arrow-wrapper:after {
@@ -124,7 +129,7 @@
 	}
 	
 	.page {
-		padding: 0em 1em 4em 1em;
+		padding: 0em 1em 0.5em 1em;
 	}
 	
 	.section-body {
@@ -215,149 +220,125 @@
 	.setting-wrapper {
 		width: 85%;
 	}
+		
+	#nav-container {
+		background-color: #57BC90;
+		height: 82.5vh;
+	}
 	
-	@supports (not (--css: variables)) or (-ms-ime-align: auto) {
-		
-		#nav-container {
-			background-color: #57BC90;
-			height: 82vh;
-		}
-		
-		#left-nav-arrow-wrapper:before {
-			left: 4px;
-		}
+	#left-nav-arrow-wrapper:before {
+		left: 4px;
+	}
 
-		#right-nav-arrow-wrapper:after {
-			right: 4px;
-		}
+	#right-nav-arrow-wrapper:after {
+		right: 4px;
+	}
 
-		#left-nav-arrow-wrapper, #right-nav-arrow-wrapper {
-			width: 2em;
-		}
-		
-		#main-page {
-			width: 772vw;
-		}
-		
-		#main-page-container {
-			padding-left: 2vw;
-			padding-right: 2vw;
-			width: 772vw;
-		}
-		
-		.page {
-			margin-right: 1vw;
-			margin-left: 1vw;
-			width: 94vw;
-		}
+	#left-nav-arrow-wrapper, #right-nav-arrow-wrapper {
+		width: 2em;
+	}
+	
+	#main-page {
+		width: 772vw;
+	}
+	
+	#main-page-container {
+		padding-left: 2vw;
+		padding-right: 2vw;
+		width: 772vw;
+	}
+	
+	.page {
+		margin-right: 1vw;
+		margin-left: 1vw;
+		width: 94vw;
+	}
 
-		.main-nav-item {
-			width: 16vh;
-			height: 16vh;
-			line-height: 16vh;
-			
-			background-color: #015249;
-			
-			-webkit-transition: -webkit-transform 0.4s;
-			transition: -webkit-transform 0.4s;
-			-o-transition: transform 0.4s;
-			transition: transform 0.4s;
-			transition: transform 0.4s, -webkit-transform 0.4s;
-		}
+	.main-nav-item {
+		width: 16vh;
+		height: 16vh;
+		line-height: 16vh;
 		
-		.main-nav-item:hover {
-			-ms-transform: scale( 1.1 );
-			-webkit-transform: scale( 1.1 );
-			transform: scale( 1.1 );
-		}
-
-		.main-nav-item.selected div {
-			color: #015249;
-		}
-
-		#mobile-nav-bar {
-			background-color: #015249;
-			height: 10vh;
-		}
-
-		#mobile-nav-bar .print.icon {
-			fill: transparent;
-			stroke: white;
-		}
+		background-color: #015249;
 		
-		.menu-control-btn {
-			background-color: #77C9D4;
-			border: 2px solid #015249;
-		}
+		-webkit-transition: -webkit-transform 0.4s;
+		transition: -webkit-transform 0.4s;
+		-o-transition: transform 0.4s;
+		transition: transform 0.4s;
+		transition: transform 0.4s, -webkit-transform 0.4s;
+	}
+	
+	.main-nav-item:hover {
+		-ms-transform: scale( 1.1 );
+		-webkit-transform: scale( 1.1 );
+		transform: scale( 1.1 );
+	}
+
+	.main-nav-item.selected div {
+		color: #015249;
+	}
+
+	#mobile-nav-bar {
+		background-color: #015249;
+		height: 10vh;
+	}
+
+	#mobile-nav-bar .print.icon {
+		fill: transparent;
+		stroke: white;
+	}
+	
+	.menu-control-btn {
+		background-color: #77C9D4;
+		border: 2px solid #015249;
+	}
+	
+	@supports (transform: translateX(1px)) {
+		/** Unsupported in Opera Mini **/
 		
-		@supports (transform: translateX(1px)) {
-			/** Unsupported in Opera Mini **/
-			
-			/* Translation for mobile - Microsoft Edge has issues with multiple calc() functions chained in variables */
-			:target ~ #mpc-wrapper > #main-page-container, #welcome:target ~ #mpc-wrapper > #main-page-container { 
-				-webkit-transform: translate3d( 0, 0, 0 );
-				transform: translate3d( 0, 0, 0);
-			}
-			#education:target ~ #mpc-wrapper > #main-page-container {
-				-webkit-transform: translate3d( -96vw, 0, 0 );
-				transform: translate3d( -96vw, 0, 0 );
-			}
-			#experience:target ~ #mpc-wrapper > #main-page-container {
-				-webkit-transform: translate3d( -192vw, 0, 0 );
-				transform: translate3d( -192vw, 0, 0);
-			}
-			#projects:target ~ #mpc-wrapper > #main-page-container {
-				-webkit-transform: translate3d( -288vw, 0, 0 );
-				transform: translate3d( -288vw, 0, 0);
-			}
-			#activities:target ~ #mpc-wrapper > #main-page-container {
-				-webkit-transform: translate3d( -384vw, 0, 0 );
-				transform: translate3d( -384vw, 0, 0);
-			}
-			#resume:target ~ #mpc-wrapper > #main-page-container {
-				-webkit-transform: translate3d( -480vw, 0, 0 );
-				transform: translate3d( -480vw, 0, 0);
-			}
-			#actions:target ~ #mpc-wrapper > #main-page-container {
-				-webkit-transform: translate3d( -576vw, 0, 0 );
-				transform: translate3d( -576vw, 0, 0);
-			}
-			#settings:target ~ #mpc-wrapper > #main-page-container {
-				-webkit-transform: translate3d( -672vw, 0, 0 );
-				transform: translate3d( -672vw, 0, 0);
-			}
+		/* Translation for mobile - Microsoft Edge, Android Chrome, and Android Opera Mini all have issues with multiple calc() functions chained in variables */
+		:target ~ #mpc-wrapper > #main-page-container, #welcome:target ~ #mpc-wrapper > #main-page-container { 
+			-webkit-transform: translate3d( 0, 0, 0 );
+			transform: translate3d( 0, 0, 0);
+		}
+		#education:target ~ #mpc-wrapper > #main-page-container {
+			-webkit-transform: translate3d( -96vw, 0, 0 );
+			transform: translate3d( -96vw, 0, 0 );
+		}
+		#experience:target ~ #mpc-wrapper > #main-page-container {
+			-webkit-transform: translate3d( -192vw, 0, 0 );
+			transform: translate3d( -192vw, 0, 0);
+		}
+		#projects:target ~ #mpc-wrapper > #main-page-container {
+			-webkit-transform: translate3d( -288vw, 0, 0 );
+			transform: translate3d( -288vw, 0, 0);
+		}
+		#activities:target ~ #mpc-wrapper > #main-page-container {
+			-webkit-transform: translate3d( -384vw, 0, 0 );
+			transform: translate3d( -384vw, 0, 0);
+		}
+		#resume:target ~ #mpc-wrapper > #main-page-container {
+			-webkit-transform: translate3d( -480vw, 0, 0 );
+			transform: translate3d( -480vw, 0, 0);
+		}
+		#actions:target ~ #mpc-wrapper > #main-page-container {
+			-webkit-transform: translate3d( -576vw, 0, 0 );
+			transform: translate3d( -576vw, 0, 0);
+		}
+		#settings:target ~ #mpc-wrapper > #main-page-container {
+			-webkit-transform: translate3d( -672vw, 0, 0 );
+			transform: translate3d( -672vw, 0, 0);
 		}
 	}
 
 	@supports (--css: variables) and (not (-ms-ime-align: auto)) {
-		:root {
-			--gap: 0.5em;
-		}
-		
+
 		#nav-container {
 			background-color: var(--marine);
-			height: calc(100vh - var(--title-height) - var(--mobile-nav-ht));
-		}
-
-		#mpc-wrapper {
-			--arrow-side-offset: 4px;
-		}
-
-		#left-nav-arrow-wrapper, #right-nav-arrow-wrapper {
-			width: calc(5.5 * var(--gap));
-		}
-
-		#main-page-container {
-			--padded: var(--gap);
 		}
 
 		.main-nav-item {
-			--sizing: 16vh;
-			--transition-transform-duration: 0.4s;
 			background-color: var(--forest);
-			width: var(--sizing);
-			height: var(--sizing);
-			line-height: var(--sizing);
 		}
 		
 		.main-nav-item:hover {
@@ -371,7 +352,6 @@
 		#mobile-nav-bar {
 			--main-svg-color: white;
 			background-color: var(--forest);
-			height: var(--mobile-nav-ht);
 		}
 
 		#mobile-nav-bar .print.icon {
@@ -502,6 +482,14 @@
 			width: 4em;
 		}
 		
+		#left-nav-arrow-wrapper:before {
+			left: 10px;
+		}
+
+		#right-nav-arrow-wrapper:after {
+			right: 10px;
+		}
+		
 		#main-page {
 			width: 688vw;
 		}
@@ -516,14 +504,6 @@
 			margin-right: 2vw;
 			margin-left: 2vw;
 			width: 80vw;
-		}
-
-		#left-nav-arrow-wrapper:before {
-			left: 10px;
-		}
-
-		#right-nav-arrow-wrapper:after {
-			right: 10px;
 		}
 
 		.resume-filter-list {
@@ -592,8 +572,18 @@
 			width: calc(2 * var(--gap));
 		}
 		
+		#left-nav-arrow-wrapper:before {
+			left: var(--arrow-side-offset);
+		}
+
+		#right-nav-arrow-wrapper:after {
+			right: var(--arrow-side-offset);
+		}
+		
 		#main-page-container {
 			--padded: calc(2*var(--gap));
+			padding-left: var(--padded);
+			padding-right: var(--padded);
 		}
 		
 		#mpc-wrapper {
@@ -602,6 +592,23 @@
 
 		.resume-filter-list {
 			border: 1.5px solid var(--forest);
+		}
+		
+		.page {
+			width: var(--section-width);
+			margin-right: calc(var(--page-margin)/2);
+			margin-left: calc(var(--page-margin)/2);
+		}
+		
+		@supports (transform: translateX(1px)) {
+			:target ~ #mpc-wrapper > #main-page-container, #welcome:target ~ #mpc-wrapper > #main-page-container { --translate-x: 0; }
+			#education:target ~ #mpc-wrapper > #main-page-container { --translate-x: calc(-1 * var(--slide-move) ); }
+			#experience:target ~ #mpc-wrapper > #main-page-container { --translate-x: calc(-2 * var(--slide-move) ); }
+			#projects:target ~ #mpc-wrapper > #main-page-container { --translate-x: calc(-3 * var(--slide-move) ); }
+			#activities:target ~ #mpc-wrapper > #main-page-container { --translate-x: calc(-4 * var(--slide-move) ); }
+			#resume:target ~ #mpc-wrapper > #main-page-container { --translate-x: calc(-5 * var(--slide-move) ); }
+			#actions:target ~ #mpc-wrapper > #main-page-container {	--translate-x: calc(-6 * var(--slide-move) ); }
+			#settings:target ~ #mpc-wrapper > #main-page-container { --translate-x: calc(-7 * var(--slide-move) ); }
 		}
 	}
 }
@@ -1658,14 +1665,6 @@ label.settings {
 		border-color: var(--night);
 	}
 	
-	#left-nav-arrow-wrapper:before {
-		left: var(--arrow-side-offset);
-	}
-
-	#right-nav-arrow-wrapper:after {
-		right: var(--arrow-side-offset);
-	}
-	
 	#profile-photo-container {
 		--profile-ht: 25vh;
 		height: var(--profile-ht);
@@ -1733,29 +1732,11 @@ label.settings {
 		--added-transition: opacity 1s;
 		
 		width: calc(2*var(--padded) + var(--num-sections) * (var(--section-width) + var(--gap)));
-		padding-left: var(--padded);
-		padding-right: var(--padded);
-		
 		background-color: var(--silver);
 	}
 
-	.page {
-		width: var(--section-width);
-		margin-right: calc(var(--page-margin)/2);
-		margin-left: calc(var(--page-margin)/2);
-	}
-
-	@supports (transform: translateX(1px)) {
+	@supports (transform: scale(1)) {
 		/** Unsupported in Opera Mini extreme **/
-		
-		:target ~ #mpc-wrapper > #main-page-container, #welcome:target ~ #mpc-wrapper > #main-page-container { --translate-x: 0; }
-		#education:target ~ #mpc-wrapper > #main-page-container { --translate-x: calc(-1 * var(--slide-move) ); }
-		#experience:target ~ #mpc-wrapper > #main-page-container { --translate-x: calc(-2 * var(--slide-move) ); }
-		#projects:target ~ #mpc-wrapper > #main-page-container { --translate-x: calc(-3 * var(--slide-move) ); }
-		#activities:target ~ #mpc-wrapper > #main-page-container { --translate-x: calc(-4 * var(--slide-move) ); }
-		#resume:target ~ #mpc-wrapper > #main-page-container { --translate-x: calc(-5 * var(--slide-move) ); }
-		#actions:target ~ #mpc-wrapper > #main-page-container {	--translate-x: calc(-6 * var(--slide-move) ); }
-		#settings:target ~ #mpc-wrapper > #main-page-container { --translate-x: calc(-7 * var(--slide-move) ); }
 
 		/* Shrinks section(s) that are off the side */
 		:target ~ #mpc-wrapper > #main-page-container > .page:not(#welcome-container), 
@@ -1925,7 +1906,6 @@ label.settings {
 	#settings:target ~ #mpc-wrapper > #main-page-container > .page:not(#settings-container) {
 		opacity: 1;
 	}
-
 }
 
 

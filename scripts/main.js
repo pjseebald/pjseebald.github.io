@@ -1,5 +1,21 @@
 var pageModule = function() {
 	
+	/**
+	 * Vue app to store events between apps.
+	 */
+	let eventBus = new Vue({});
+	
+	// Loading container to briefly hide elements while the data loads
+	let loadingApp = new Vue({
+		created: function() {
+			eventBus.$on('page-loaded', () => {this.loadingShow = false;});
+		},
+		el: '#loading-container',
+		data: {
+			loadingShow: true,
+		}
+	});
+	
 	const svgSource = './img/icons.svg';
 	
 	const _showAllText = 'Show All';
@@ -107,10 +123,7 @@ var pageModule = function() {
 		}
 		targetStore.updateTarget();
 
-		/**
-		 * Vue app to store events between apps.
-		 */
-		let eventBus = new Vue({});
+		eventBus.$emit('page-loaded');
 		
 		/**
 		 * Event watcher for hash change
@@ -160,7 +173,7 @@ var pageModule = function() {
 					try {
 						window.print();
 					} catch(err) {
-						let message = 'Javascript window print function does not work on your browser. Print directly from browser, if possible.\n\nClick menu button below to close this message.';
+						let message = 'Javascript window print function does not work. Print directly from browser, if possible.\n\nClick menu button below to close this message.';
 						this.mobileHide = false;
 						this.mobileErrorMessage = message;
 					}

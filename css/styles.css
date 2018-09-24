@@ -706,6 +706,58 @@ body {
 	display: none;
 }
 
+#loading-container {
+	text-align: center;
+	
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 0;
+	width: 0;
+	z-index: 1000;
+}
+
+#load-screen {
+	font-family: 'Inconsolata', 'Helvetica', sans-serif;
+	font-size: 1em;
+	padding-top: 40vh;
+	text-align: center;
+	position: absolute;
+	height: 100vh;
+	width: 100vw;
+}
+
+#load-text {
+	position: relative;
+}
+
+#load-text::before, #load-text::after {
+	content: '';
+	border-top: 2px solid;
+	border-bottom: 2px solid;
+	position: absolute;
+	border-radius: 100%;
+	
+	-webkit-animation: full-spin 2s infinite;
+	animation: full-spin 2s infinite;
+}
+
+#load-text::before {
+	height: 8em;
+	width: 8em;
+	left: -1.5em;
+	top: -3.5em;
+	animation-timing-function: ease-out;
+}
+
+#load-text::after {
+	height: 9em;
+	width: 9em;
+	left: -2em;
+	top: -4em;
+	animation-timing-function: ease-in;
+}
+
 #title-container {
 	box-sizing: border-box;
 	color: white;
@@ -865,11 +917,11 @@ body {
 }
 
 .icon-card:hover .icon.gear {
-	-webkit-animation: gear-spin 10s infinite;
-	animation: gear-spin 10s infinite;
+	-webkit-animation: full-spin 10s infinite;
+	animation: full-spin 10s infinite;
 }
 
-@keyframes gear-spin {
+@keyframes full-spin {
 	0% {}
 	100% {
 		-webkit-transform: rotate(360deg);
@@ -878,7 +930,7 @@ body {
 	}
 }
 
-@-webkit-keyframes gear-spin {
+@-webkit-keyframes full-spin {
 	0% {}
 	100% {
 		-webkit-transform: rotate(360deg);
@@ -1426,6 +1478,14 @@ label.settings {
 	transition: opacity 0.5s ease-in-out;
 }
 
+.fading-longer-enter, .fading-longer-leave-to {
+	opacity: 0;
+}
+
+.fading-longer-enter-active, .fading-longer-leave-active {
+	transition: opacity 1s ease-in-out;
+}
+
 @supports (not (--css: variables)) or (-ms-ime-align: auto) {
 
 	::-webkit-scrollbar-track {
@@ -1434,6 +1494,18 @@ label.settings {
 
 	[tooltip]:after {
 		background-color: #262228;
+	}
+	
+	#load-screen {
+		background-color: #57BC90;
+	}
+	
+	#load-text::before {
+		border-color: #0074D9;
+	}
+	
+	#load-text::after {
+		border-color: #262228;
 	}
 
 	#title-container {
@@ -1654,6 +1726,18 @@ label.settings {
 	
 	[tooltip]:after {
 		background-color: var(--night);
+	}
+	
+	#load-screen {
+		background-color: var(--feather);
+	}
+	
+	#load-text::before {
+		border-color: var(--blue);
+	}
+
+	#load-text::after {
+		border-color: var(--night);
 	}
 	
 	#title-container {

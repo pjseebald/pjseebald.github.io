@@ -12,6 +12,11 @@
 <body>
 
 <div id="page-container" class="disp-flex">
+
+	<div id="loading-container" class="no-print">
+		<transition name="fading-longer"><div id="load-screen" v-if="loadingShow"><span id="load-text">Loading...</span></div></transition>
+	</div>
+
 	<div id="title-container" class="disp-flex">
 		<div id="title-name" class="f-w-b">{{ personTitle }}</div>
 		<div id="title-icon-container" class="print-only">
@@ -19,8 +24,6 @@
 			<div id="title-link-print-linkedin">https://www.linkedin.com/in/paulseebald</div>
 		</div>
 	</div>
-
-
 
 <div id="main-container" class="disp-flex">
 
@@ -34,7 +37,6 @@
 			</nav-item>
 		</ul>
 	</nav>
-		
 	
 	<div id="main-page" class="disp-flex">
 	

@@ -37,7 +37,8 @@
 			{"title": "Grove City College", "gpa": "3.88", "degree": "B.S. in Mechanical Engineering", "gradYear": "2007", "tags": ""}
 		],
 		"projects": [
-			{"title": "Resume Website", "description": "Built an interactive resume website using Javascript framework Vue.js with ES6.", "tags": "HTML,Javascript,CSS,Software Engineering"},
+			{"title": "Full-Stack Apps", "description": "Developed three full-scale applications through online courses.", "tags": "HTML,Javascript,Java,Python,APIs,Spring,Hibernate,CSS,Software Engineering"},
+			{"title": "Resume Website", "description": "Built an interactive resume website using Javascript framework Vue.js with ES6 for 90+% browser coverage.", "tags": "HTML,Javascript,CSS,Software Engineering"},
 			{"title": "Interactive Football Roster", "description": "Designed, built, and maintained interactive web page for managing a college football team roster: <a class=\"csr-p\" rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://projectpsu.github.io\">Project PSU</a>", "tags": "HTML,Javascript,CSS,Software Engineering"},
 			{"title": "Data Analysis", "description": "Used linear and nonlinear regression analysis to calculate the contractual value of every draft pick and compare to free agents for an NFL team.", "tags": "Data Analysis,Python"},
 			{"title": "Consuming API's", "description": "Compiled, HTML formatted, and emailed unread tweets through Python and the Twitter API. Used a database to store ID's of tweets that had already been read.", "tags": "Python,APIs,HTML,Software Engineering,SQL"},

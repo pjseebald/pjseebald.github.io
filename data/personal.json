@@ -3,6 +3,15 @@
 	"title": "Paul Seebald, Ph.D.",
 	"resume": {
 		"experience": [{
+				"org": "Cardinal Health",
+				"position": "Software Engineer",
+				"descriptions": [
+					{"title": "Software Development", "years": {"start": 2019, "end": 2020}, "description": "Lead developer for multiple-phase code deployments responding to new regulations at state and federal level.", "tags": "WebSphere,Java,JSP,Spring,Hibernate,DB2,Software Engineering,HTML,CSS,Javascript,APIs"},	
+					{"title": "Java Class Development", "years": {"start": 2019, "end": 2020}, "description": "Designed generic and extensible classes for state and federal reports to be generated.", "tags": "Java,Software Engineering"},
+					{"title": "Code Design", "years": {"start": 2019, "end": 2020}, "description": "Determined minimum viable product for first phase code deployment based on initial requirements.", "tags": "Java,DB2,Software Engineering,Javascript,APIs,Spring,Hibernate"},
+					{"title": "Documentation", "years": {"start": 2019, "end": 2020}, "description": "Wrote documentation for transitioning code changes to full-time support.", "tags": "Java,DB2,Software Engineering,Javascript,APIs,Spring,Hibernate"}
+				]
+			},{
 				"org": "IBM",
 				"position": "Software Engineer",
 				"descriptions": [
